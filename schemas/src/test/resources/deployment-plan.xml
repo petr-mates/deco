@@ -1,0 +1,28 @@
+<deployment-plan xmlns="http://cz.mates.deployment/plan">
+    <application-name>string</application-name>
+    <variable-definitions>
+        <variable>
+            <description>description</description>
+            <name>variable_name</name>
+            <value>variable_value</value>
+        </variable>
+    </variable-definitions>
+    <module-override>
+        <module-name>anyWebApplication</module-name>
+        <module-type>war</module-type>
+    </module-override>
+    <module-override>
+        <module-name>anyResourceAdapter</module-name>
+        <module-type>rar</module-type>
+        <module-descriptor>
+            <uri></uri>
+            <insert type="insertAfter">
+                <xpath></xpath>
+                <value></value>
+            </insert>
+            <replace type="content">
+                <xpath></xpath>
+            </replace>
+        </module-descriptor>
+    </module-override>
+</deployment-plan>

@@ -1,0 +1,115 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0"
+            xmlns:tns="http://cz.mates.deployment/plan"
+            targetNamespace="http://cz.mates.deployment/plan" attributeFormDefault="unqualified"
+            elementFormDefault="qualified">
+    <xsd:element name="deployment-plan" type="tns:Deployment-Plan">
+        <xsd:annotation>
+            <xsd:documentation>deployment element root element.
+
+                deployment plan example:
+                <![CDATA[
+
+                <deployment-plan xmlns="http://cz.mates.deployment/plan">
+                    ...
+                    ...
+                </deployment-plan>
+
+                ]]>
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:complexType name="Deployment-Plan">
+        <xsd:annotation>
+            <xsd:documentation>
+                deployment plan root element complex type
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="application-name" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>deployment plan name</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="variable-definitions" type="tns:Variable-Definitions" minOccurs="0"/>
+            <xsd:element name="module-override" type="tns:Module-Override" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Variable-Definitions">
+        <xsd:sequence>
+            <xsd:element name="variable" type="tns:Variable-Definition" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Variable-Definition">
+        <xsd:sequence>
+            <xsd:group ref="tns:Description"/>
+            <xsd:element name="name" type="tns:VariableName"/>
+            <xsd:element name="value" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Module-Override">
+        <xsd:sequence>
+            <xsd:element name="module-name" type="xsd:string"/>
+            <xsd:element name="module-type" type="xsd:string"/>
+            <xsd:element name="module-descriptor" type="tns:Module-Descriptor" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Module-Descriptor">
+        <xsd:sequence>
+            <xsd:element name="uri" type="xsd:anyURI"/>
+            <xsd:choice maxOccurs="unbounded">
+                <xsd:element name="insert" type="tns:Insert"/>
+                <xsd:element name="replace" type="tns:Replace"/>
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Insert">
+        <xsd:sequence>
+            <xsd:group ref="tns:Description"/>
+            <xsd:element name="xpath" type="xsd:string"/>
+            <xsd:element name="value" type="xsd:anyType" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="type" type="tns:InsertOperation" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="Replace">
+        <xsd:sequence>
+            <xsd:group ref="tns:Description"/>
+            <xsd:element name="xpath" type="xsd:string"/>
+            <xsd:element name="value" type="xsd:anyType" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="type" type="tns:ReplaceOperation" use="required"/>
+    </xsd:complexType>
+
+
+    <xsd:group name="Description">
+        <xsd:sequence>
+            <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:group>
+
+    <xsd:simpleType name="VariableName">
+        <xsd:restriction base="xsd:normalizedString"/>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="InsertOperation">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="insertAfter"/>
+            <xsd:enumeration value="insertBefore"/>
+            <xsd:enumeration value="insertAsLastChildOf"/>
+            <xsd:enumeration value="insertAsFirstChildOf"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="ReplaceOperation">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="content"/>
+            <xsd:enumeration value="entireNode"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+</xsd:schema>
