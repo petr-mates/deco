@@ -1,4 +1,4 @@
-# deployment plan
+# Deployment Descriptor Configurator
 
 Application to configure Java EE applications using deployment plan.
 

@@ -5,18 +5,25 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>deployment-plan</artifactId>
-        <groupId>cz.mates.plan</groupId>
+        <groupId>cz.deco.javaee.depl</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>schemas</artifactId>
     <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
             <!-- Turn this into a lifecycle -->
             <plugin>
                 <artifactId>maven-remote-resources-plugin</artifactId>
-                <version>1.5</version>
                 <executions>
                     <execution>
                         <goals>
@@ -24,6 +31,11 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <includes>
+                        <include>*.xsd</include>
+                    </includes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -4,14 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cz.mates.plan</groupId>
+    <groupId>cz.deco.javaee.depl</groupId>
     <artifactId>deployment-plan</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <modules>
         <module>schemas</module>
+        <module>configuration</module>
     </modules>
     <packaging>pom</packaging>
     <description>
+        Deployment Descriptor Configurator.
         This project should configure Java EE applications using deployment plan.
     </description>
     <contributors>
@@ -19,6 +21,11 @@
             <name>Petr Mates</name>
         </contributor>
     </contributors>
+
+    <organization>
+        <name>Mates</name>
+    </organization>
+    <inceptionYear>2016</inceptionYear>
 
     <prerequisites>
         <maven>3.0</maven>
@@ -28,6 +35,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
+
+        <version.junit>4.12</version.junit>
     </properties>
 
     <scm>
@@ -35,6 +44,18 @@
         <connection>https://github.com/petr-mates/deployment-plan.git</connection>
         <url>https://github.com/petr-mates/deployment-plan.git</url>
     </scm>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${version.junit}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 
     <build>
         <pluginManagement>
@@ -89,9 +110,42 @@
                     <artifactId>maven-remote-resources-plugin</artifactId>
                     <version>1.5</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jaxb2-maven-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>1.8</version>
+                    <configuration>
+                        <verbose>false</verbose>
+                        <addSvnKeyWords>false</addSvnKeyWords>
+                        <licenseName>apache_v2</licenseName>
+                        <roots>
+                            <root>src/main/java</root>
+                            <root>src/test/java</root>
+                        </roots>
+                        <projectName>Descriptor Configurator</projectName>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>update-file-header</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>

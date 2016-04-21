@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>deployment-plan</artifactId>
+        <groupId>cz.deco.javaee.depl</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>configuration</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Turn this into a lifecycle -->
+            <plugin>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <attachToMain>true</attachToMain>
+                    <resourceBundles>
+                        <resourceBundle>${project.groupId}:schemas:${project.version}</resourceBundle>
+                    </resourceBundles>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sources>
+                        <source>${project.build.directory}/maven-shared-archive-resources/deployment-plan.xsd</source>
+                    </sources>
+                    <xjbSources>
+                        <source>src/main/xjb/bindings.xml</source>
+                    </xjbSources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

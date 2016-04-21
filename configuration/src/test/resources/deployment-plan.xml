@@ -22,7 +22,12 @@
             </insert>
             <replace type="content">
                 <xpath></xpath>
-                <xml></xml>
+                <xml>
+                    <ns:env-entry xmlns:ns="http://test/with/namespace">
+                        <entry-name>name</entry-name>
+                        <entry-type>java.lang.String</entry-type>
+                    </ns:env-entry>
+                </xml>
             </replace>
         </module-descriptor>
     </module-override>
