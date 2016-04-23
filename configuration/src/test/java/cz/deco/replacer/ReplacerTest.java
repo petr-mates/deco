@@ -40,10 +40,16 @@ import java.io.IOException;
 public class ReplacerTest {
 
     private Object detectInnerClass;
+    private Replacer replacer = new Replacer();
+    private Element elementToInsert;
+    private Replace replace = new Replace();
+    private Insert insert = new Insert();
 
     @Before
-    public void init() {
+    public void init() throws IOException, SAXException {
         detectInnerClass = null;
+        replacer.setDocument(loadDocument());
+        elementToInsert = loadDocument().createElement("elementToInsert");
     }
 
     public Document loadDocument() throws IOException, SAXException {
@@ -52,33 +58,10 @@ public class ReplacerTest {
     }
 
     @Test
-    public void applyInsertText() throws Exception {
-        Replacer replacer = new Replacer();
-        Insert insert = new Insert();
-        insert.setXpath("/test");
-        insert.setType(InsertOperation.INSERT_AS_FIRST_CHILD_OF);
-        insert.setText("text node");
-        replacer.setInserter(new InsertIntoXml() {
-            @Override
-            protected void insertXml(Document document, Node intoNode, InsertOperation type, Node what) {
-                detectInnerClass = new Object();
-                Assert.assertNotNull(what);
-                Assert.assertEquals("fake", what.getNodeName());
-            }
-        });
-        replacer.setDocument(loadDocument());
-        replacer.apply(insert);
-        Assert.assertNotNull(detectInnerClass);
-    }
-
-    @Test
     public void applyInsertXml() throws Exception {
-        Replacer replacer = new Replacer();
-        Insert insert = new Insert();
         insert.setXpath("/test");
         insert.setType(InsertOperation.INSERT_AS_FIRST_CHILD_OF);
-        final Element elementToInsert = loadDocument().createElement("elementToInsert");
-        insert.setXml(elementToInsert);
+        insert.setValue(elementToInsert);
         replacer.setInserter(new InsertIntoXml() {
             @Override
             protected void insertXml(Document document, Node intoNode, InsertOperation type, Node what) {
@@ -86,19 +69,15 @@ public class ReplacerTest {
                 Assert.assertSame(what, elementToInsert);
             }
         });
-        replacer.setDocument(loadDocument());
         replacer.apply(insert);
         Assert.assertNotNull(detectInnerClass);
     }
 
     @Test
     public void applyReplaceXml() throws Exception {
-        Replacer replacer = new Replacer();
-        Replace replace = new Replace();
         replace.setXpath("/test");
         replace.setType(ReplaceOperation.CONTENT);
-        final Element elementToInsert = loadDocument().createElement("elementToInsert");
-        replace.setXml(elementToInsert);
+        replace.setValue(elementToInsert);
         replacer.setReplacer(new ReplaceInXml() {
             @Override
             protected void replaceXml(Document document, Node intoNode, ReplaceOperation type, Node what) {
@@ -106,48 +85,22 @@ public class ReplacerTest {
                 Assert.assertSame(what, elementToInsert);
             }
         });
-        replacer.setDocument(loadDocument());
-        replacer.apply(replace);
-        Assert.assertNotNull(detectInnerClass);
-    }
-
-    @Test
-    public void applyReplaceText() throws Exception {
-        Replacer replacer = new Replacer();
-        Replace replace = new Replace();
-        replace.setXpath("/test");
-        replace.setType(ReplaceOperation.CONTENT);
-        replace.setText("text to replace");
-        replacer.setReplacer(new ReplaceInXml() {
-            @Override
-            protected void replaceXml(Document document, Node intoNode, ReplaceOperation type, Node what) {
-                detectInnerClass = new Object();
-                Assert.assertNotNull(what);
-                Assert.assertEquals("fake", what.getNodeName());
-            }
-        });
-        replacer.setDocument(loadDocument());
         replacer.apply(replace);
         Assert.assertNotNull(detectInnerClass);
     }
 
     @Test
     public void applyReplaceXmlInvalidXpath() throws Exception {
-        Replacer replacer = new Replacer();
-        Replace replace = new Replace();
         replace.setXpath("/invalidXpath");
         replace.setType(ReplaceOperation.CONTENT);
-        final Element elementToInsert = loadDocument().createElement("elementToInsert");
-        replace.setXml(elementToInsert);
+        replace.setValue(elementToInsert);
         replacer.setReplacer(new ReplaceInXml() {
             @Override
             protected void replaceXml(Document document, Node intoNode, ReplaceOperation type, Node what) {
                 detectInnerClass = new Object();
             }
         });
-        replacer.setDocument(loadDocument());
         replacer.apply(replace);
         Assert.assertNull(detectInnerClass);
     }
-
 }

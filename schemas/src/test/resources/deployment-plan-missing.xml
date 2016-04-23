@@ -17,11 +17,11 @@
             <uri></uri>
             <insert type="insertAfter">
                 <xpath></xpath>
-                <text></text>
+                <value></value>
             </insert>
             <replace type="content">
                 <xpath></xpath>
-                <xml></xml>
+                <value></value>
             </replace>
         </module-descriptor>
     </module-override>

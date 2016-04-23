@@ -95,8 +95,7 @@
 
     <xsd:group name="Value">
         <xsd:choice>
-            <xsd:element name="xml" type="xsd:anyType"/>
-            <xsd:element name="text" type="xsd:string"/>
+            <xsd:element name="value" type="xsd:anyType"/>
         </xsd:choice>
     </xsd:group>
 

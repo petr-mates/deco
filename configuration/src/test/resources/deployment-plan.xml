@@ -18,16 +18,16 @@
             <uri></uri>
             <insert type="insertAfter">
                 <xpath></xpath>
-                <text></text>
+                <value></value>
             </insert>
             <replace type="content">
                 <xpath></xpath>
-                <xml>
+                <value>
                     <ns:env-entry xmlns:ns="http://test/with/namespace">
                         <entry-name>name</entry-name>
                         <entry-type>java.lang.String</entry-type>
                     </ns:env-entry>
-                </xml>
+                </value>
             </replace>
         </module-descriptor>
     </module-override>
