@@ -9,9 +9,9 @@ package cz.deco.replacer;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,7 +49,7 @@ public class ReplacerTest {
     private Object detectInnerClass;
 
     @Before
-    public void init(){
+    public void init() {
         detectInnerClass = null;
     }
 
@@ -75,7 +75,7 @@ public class ReplacerTest {
         insert.setXpath("/test");
         insert.setType(InsertOperation.INSERT_AS_FIRST_CHILD_OF);
         insert.setText("text node");
-        replacer.setInserter(new InsertIntoXml(){
+        replacer.setInserter(new InsertIntoXml() {
             @Override
             protected void insertXml(Document document, Node intoNode, InsertOperation type, Node what) {
                 detectInnerClass = new Object();
@@ -96,7 +96,7 @@ public class ReplacerTest {
         insert.setType(InsertOperation.INSERT_AS_FIRST_CHILD_OF);
         final Element elementToInsert = loadDocument().createElement("elementToInsert");
         insert.setXml(elementToInsert);
-        replacer.setInserter(new InsertIntoXml(){
+        replacer.setInserter(new InsertIntoXml() {
             @Override
             protected void insertXml(Document document, Node intoNode, InsertOperation type, Node what) {
                 detectInnerClass = new Object();
@@ -116,7 +116,7 @@ public class ReplacerTest {
         replace.setType(ReplaceOperation.CONTENT);
         final Element elementToInsert = loadDocument().createElement("elementToInsert");
         replace.setXml(elementToInsert);
-        replacer.setReplacer(new ReplaceInXml(){
+        replacer.setReplacer(new ReplaceInXml() {
             @Override
             protected void replaceXml(Document document, Node intoNode, ReplaceOperation type, Node what) {
                 detectInnerClass = new Object();
@@ -135,7 +135,7 @@ public class ReplacerTest {
         replace.setXpath("/test");
         replace.setType(ReplaceOperation.CONTENT);
         replace.setText("text to replace");
-        replacer.setReplacer(new ReplaceInXml(){
+        replacer.setReplacer(new ReplaceInXml() {
             @Override
             protected void replaceXml(Document document, Node intoNode, ReplaceOperation type, Node what) {
                 detectInnerClass = new Object();
@@ -146,6 +146,25 @@ public class ReplacerTest {
         replacer.setDocument(loadDocument());
         replacer.apply(replace);
         Assert.assertNotNull(detectInnerClass);
+    }
+
+    @Test
+    public void applyReplaceXmlInvalidXpath() throws Exception {
+        Replacer replacer = new Replacer();
+        Replace replace = new Replace();
+        replace.setXpath("/invalidXpath");
+        replace.setType(ReplaceOperation.CONTENT);
+        final Element elementToInsert = loadDocument().createElement("elementToInsert");
+        replace.setXml(elementToInsert);
+        replacer.setReplacer(new ReplaceInXml() {
+            @Override
+            protected void replaceXml(Document document, Node intoNode, ReplaceOperation type, Node what) {
+                detectInnerClass = new Object();
+            }
+        });
+        replacer.setDocument(loadDocument());
+        replacer.apply(replace);
+        Assert.assertNull(detectInnerClass);
     }
 
 }
