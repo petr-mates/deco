@@ -21,6 +21,8 @@ package cz.deco.el;
  */
 
 import cz.deco.javaee.deployment_plan.VariableDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -29,6 +31,8 @@ import javax.el.ValueExpression;
 import java.util.List;
 
 public class ELReplacer {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ELReplacer.class);
 
     private VariableContext context;
 
@@ -52,9 +56,11 @@ public class ELReplacer {
         }
     }
 
-    protected String replaceText(String s) {
+    protected String replaceText(String source) {
         ExpressionFactory factory = ELFactory.getFactory();
-        ValueExpression ve = factory.createValueExpression(context, s, String.class);
-        return (String) ve.getValue(context);
+        ValueExpression ve = factory.createValueExpression(context, source, String.class);
+        String replaced = (String) ve.getValue(context);
+        LOG.debug("string {} is replaced to {}", source, replaced);
+        return replaced;
     }
 }

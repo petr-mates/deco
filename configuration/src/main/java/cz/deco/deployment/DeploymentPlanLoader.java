@@ -24,6 +24,8 @@ package cz.deco.deployment;
 import cz.deco.DeploymentPlanException;
 import cz.deco.javaee.deployment_plan.DeploymentPlan;
 import cz.deco.xml.XMLFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -43,6 +45,8 @@ import java.io.InputStream;
 
 public class DeploymentPlanLoader {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DeploymentPlanLoader.class);
+
     public DeploymentPlan load(DeploymentPlanFile plan) {
         validatePlan(plan);
         JAXBContext context = XMLFactory.newInstance().getContext();
@@ -61,6 +65,7 @@ public class DeploymentPlanLoader {
         DocumentBuilder builder = xmlFactory.getBuilderNs();
         Validator validator = null;
         Document document = null;
+        LOG.debug("deployment plan source {}", plan.getFile());
         try (InputStream xmlStream = plan.getInputStream();
              InputStream xsdStream = xmlFactory.getSchemaStream()) {
             document = builder.parse(xmlStream);
@@ -70,6 +75,7 @@ public class DeploymentPlanLoader {
             Schema schema = factory.newSchema(schemaFile);
 
             validator = schema.newValidator();
+            LOG.trace("xml validation OK");
         } catch (IOException | SAXException e) {
             throw new DeploymentPlanException("error loading xml", e);
         }

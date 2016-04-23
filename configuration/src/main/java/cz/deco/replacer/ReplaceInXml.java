@@ -23,12 +23,16 @@ package cz.deco.replacer;
 
 import cz.deco.javaee.deployment_plan.InsertOperation;
 import cz.deco.javaee.deployment_plan.ReplaceOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class ReplaceInXml {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ReplaceInXml.class);
 
     private InsertIntoXml insertIntoXml = new InsertIntoXml();
 
@@ -52,6 +56,7 @@ public class ReplaceInXml {
     }
 
     protected void replaceNode(Node where, ReplaceOperation type, Node nodeToInsert) {
+        LOG.debug("node: {} type: {} nodeToInsert {}", where, type, nodeToInsert);
         switch (type) {
             case CONTENT:
                 NodeList childNodes = where.getChildNodes();

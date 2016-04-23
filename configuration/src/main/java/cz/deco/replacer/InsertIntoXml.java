@@ -22,12 +22,15 @@ package cz.deco.replacer;
 
 
 import cz.deco.javaee.deployment_plan.InsertOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class InsertIntoXml {
+    private static final Logger LOG = LoggerFactory.getLogger(InsertIntoXml.class);
 
     protected void insertXml(Document document, Node intoNode, InsertOperation type, Node what) {
         Element xml = (Element) what;
@@ -37,12 +40,14 @@ public class InsertIntoXml {
         for (int i = 0; i < nodeList.getLength(); i++) {
             if (i == 0) {
                 firstChild = nodeList.item(i);
+                LOG.debug("node to replace {}", firstChild);
                 Node nodeToInsert = firstChild.cloneNode(true);
                 nodeToInsert = document.adoptNode(nodeToInsert);
                 insertIntoNode(intoNode, type, nodeToInsert);
                 firstChild = nodeToInsert;
             } else {
                 Node nextChild = nodeList.item(i);
+                LOG.debug("node to replace {}", nextChild);
                 Node nodeToInsert = nextChild.cloneNode(true);
                 nodeToInsert = document.adoptNode(nodeToInsert);
                 insertIntoNode(firstChild, InsertOperation.INSERT_AFTER, nodeToInsert);
@@ -51,6 +56,7 @@ public class InsertIntoXml {
     }
 
     protected void insertIntoNode(Node intoNode, InsertOperation type, Node nodeToInsert) {
+        LOG.debug("node: {} type: {} nodeToInsert: {}", intoNode, type, nodeToInsert);
         switch (type) {
             case INSERT_AS_FIRST_CHILD_OF:
                 Node firstChild1 = intoNode.getFirstChild();

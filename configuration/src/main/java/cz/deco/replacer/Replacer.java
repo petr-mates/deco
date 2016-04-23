@@ -23,6 +23,8 @@ package cz.deco.replacer;
 import cz.deco.javaee.deployment_plan.Insert;
 import cz.deco.javaee.deployment_plan.Replace;
 import cz.deco.xml.XMLFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -32,6 +34,8 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
 public class Replacer {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Replacer.class);
 
     private Document document;
 
@@ -51,6 +55,7 @@ public class Replacer {
         String xpath = insert.getXpath();
         XPath xPath = getXPath();
         NodeList list = (NodeList) xPath.evaluate(xpath, document, XPathConstants.NODESET);
+        LOG.warn("XPATH '{}'does not match any node ", xpath);
         int length = list.getLength();
         for (int i = 0; i < length; i++) {
             Node item = list.item(i);
@@ -69,7 +74,7 @@ public class Replacer {
         XPath xPath = getXPath();
         NodeList list = (NodeList) xPath.evaluate(xpath, document, XPathConstants.NODESET);
         int length = list.getLength();
-        //Todo log length =0
+        LOG.warn("XPATH '{}'does not match any node ", xpath);
         for (int i = 0; i < length; i++) {
             Node item = list.item(i);
             if (replace.getValue() != null) {
