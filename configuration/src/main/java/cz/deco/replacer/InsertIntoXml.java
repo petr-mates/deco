@@ -25,16 +25,32 @@ import cz.deco.javaee.deployment_plan.InsertOperation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class InsertIntoXml {
 
-
     protected void insertXml(Document document, Node intoNode, InsertOperation type, Node what) {
         Element xml = (Element) what;
-        Node firstChild = xml.getFirstChild();
-        Node nodeToInsert = firstChild.cloneNode(true);
-        nodeToInsert = document.adoptNode(nodeToInsert);
+        NodeList nodeList = xml.getChildNodes();
 
+        Node firstChild = null;
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            if (i == 0) {
+                firstChild = nodeList.item(i);
+                Node nodeToInsert = firstChild.cloneNode(true);
+                nodeToInsert = document.adoptNode(nodeToInsert);
+                insertIntoNode(intoNode, type, nodeToInsert);
+                firstChild = nodeToInsert;
+            } else {
+                Node nextChild = nodeList.item(i);
+                Node nodeToInsert = nextChild.cloneNode(true);
+                nodeToInsert = document.adoptNode(nodeToInsert);
+                insertIntoNode(firstChild, InsertOperation.INSERT_AFTER, nodeToInsert);
+            }
+        }
+    }
+
+    protected void insertIntoNode(Node intoNode, InsertOperation type, Node nodeToInsert) {
         switch (type) {
             case INSERT_AS_FIRST_CHILD_OF:
                 Node firstChild1 = intoNode.getFirstChild();
