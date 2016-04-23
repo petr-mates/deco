@@ -1,4 +1,4 @@
-<deployment-plan xmlns="http://javaee.deco.cz/deployment-plan">
+<deployment-plan xmlns="http://javaee.deco.cz/deployment-plan" xmlns:w="http://java.sun.com/xml/ns/javaee">
     <application-name>test-web</application-name>
     <variable-definitions>
         <variable>
@@ -8,18 +8,14 @@
         </variable>
     </variable-definitions>
     <module-override>
-        <module-name>anyWebApplication</module-name>
-        <module-type>war</module-type>
-    </module-override>
-    <module-override>
         <module-name>anyResourceAdapter</module-name>
         <module-type>rar</module-type>
         <module-descriptor>
             <uri></uri>
             <insert type="insertAsFirstChildOf">
-                <xpath>/web-app</xpath>
+                <xpath>/w:web-app</xpath>
                 <value>
-                    <env-entry xmlns="http://java.sun.com/xml/ns/javaee">
+                    <env-entry xmlns="http://java.sun.com/xml/ns/javaeeo">
                         <entry-name>name</entry-name>
                         <entry-type>java.lang.String</entry-type>
                     </env-entry>

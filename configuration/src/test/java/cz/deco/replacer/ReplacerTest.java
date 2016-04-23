@@ -26,18 +26,15 @@ import cz.deco.javaee.deployment_plan.InsertOperation;
 import cz.deco.javaee.deployment_plan.Replace;
 import cz.deco.javaee.deployment_plan.ReplaceOperation;
 import cz.deco.xml.XMLFactory;
-import cz.deco.xml.XMLTestSupport;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.xpath.XPathConstants;
 import java.io.IOException;
 
 public class ReplacerTest {

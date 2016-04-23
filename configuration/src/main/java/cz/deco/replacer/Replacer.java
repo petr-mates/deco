@@ -20,8 +20,10 @@ package cz.deco.replacer;
  * #L%
  */
 
+import cz.deco.DeploymentPlanException;
 import cz.deco.javaee.deployment_plan.Insert;
 import cz.deco.javaee.deployment_plan.Replace;
+import cz.deco.xml.DecoContextNamespace;
 import cz.deco.xml.XMLFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +31,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.XMLConstants;
-import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
-import java.util.Iterator;
 
 public class Replacer {
 
@@ -54,10 +53,10 @@ public class Replacer {
         //ToDo store document
     }
 
-    public void apply(Insert insert) throws XPathExpressionException {
+    public void apply(Insert insert) {
         String xpath = insert.getXpath();
         XPath xPath = getXPath((Node) insert.getValue());
-        NodeList list = (NodeList) xPath.evaluate(xpath, document, XPathConstants.NODESET);
+        NodeList list = (NodeList) evaluate(xpath, xPath);
         int length = list.getLength();
         if (length == 0) {
             LOG.warn("insert XPATH '{}'does not match any node ", xpath);
@@ -70,44 +69,24 @@ public class Replacer {
         }
     }
 
+    protected Object evaluate(String xpath, XPath xPath) {
+        try {
+            return xPath.evaluate(xpath, document, XPathConstants.NODESET);
+        } catch (XPathExpressionException e) {
+            throw new DeploymentPlanException("Xpath error " + e.getLocalizedMessage(), e);
+        }
+    }
+
     protected XPath getXPath(final Node node) {
         XPath xPath = XMLFactory.newInstance().getXPathFactory().newXPath();
-        xPath.setNamespaceContext(new NamespaceContext() {
-            @Override
-            public String getNamespaceURI(String prefix) {
-                if (node != null) {
-                    if (prefix.equals(XMLConstants.DEFAULT_NS_PREFIX)) {
-                        String ns = node.getOwnerDocument().lookupNamespaceURI(null);
-                        LOG.debug("getNamespace for prefix '' {}", ns);
-                        return ns;
-                    } else {
-                        String ns = node.getOwnerDocument().lookupNamespaceURI(prefix);
-                        LOG.debug("getNamespace for prefix {} {}", prefix, ns);
-                        return ns;
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            public String getPrefix(String namespaceURI) {
-                System.out.println("xxxxx");
-                return null;
-            }
-
-            @Override
-            public Iterator getPrefixes(String namespaceURI) {
-                System.out.println("xxxxx");
-                return null;
-            }
-        });
+        xPath.setNamespaceContext(new DecoContextNamespace(node));
         return xPath;
     }
 
-    public void apply(Replace replace) throws XPathExpressionException {
+    public void apply(Replace replace) {
         String xpath = replace.getXpath();
         XPath xPath = getXPath((Node) replace.getValue());
-        NodeList list = (NodeList) xPath.evaluate(xpath, document, XPathConstants.NODESET);
+        NodeList list = (NodeList) evaluate(xpath, xPath);
         int length = list.getLength();
         if (length == 0) {
             LOG.warn("insert XPATH '{}'does not match any node ", xpath);

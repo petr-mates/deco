@@ -64,7 +64,7 @@ public class XMLFactory {
         try {
             context = JAXBContext.newInstance(DeploymentPlan.class.getPackage().getName());
         } catch (JAXBException e) {
-            throw new IllegalStateException("jaxbcontext new instance error", e);
+            throw new IllegalStateException("jaxb context new instance error", e);
         }
     }
 
@@ -74,7 +74,7 @@ public class XMLFactory {
         try {
             builderNs = documentBuilderFactory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            throw new IllegalStateException("error creating document builde", e);
+            throw new IllegalStateException("error creating document builder", e);
         }
     }
 
