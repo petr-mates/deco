@@ -43,12 +43,12 @@ and we have a deployment-plan.xml
             <uri>WEB-INF/web.xml</uri>
             <insert type="insertAsFirstChildOf">
                 <xpath>/web-app/</xpath>
-                <xml>
+                <value>
                     <env-enttry>
                         <env-name>entry_name</env-name>
                         <env-value>${variable_name}</env-value>
                     </env-enttry>
-                </xml>
+                </value>
             </insert>
         </module-descriptor>
     </module-override>
