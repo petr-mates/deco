@@ -1,0 +1,30 @@
+<deployment-plan xmlns="http://javaee.deco.cz/deployment-plan">
+    <application-name>test-web</application-name>
+    <variable-definitions>
+        <variable>
+            <description>value to change</description>
+            <name>variable_name</name>
+            <value>variable_value</value>
+        </variable>
+    </variable-definitions>
+    <module-override>
+        <module-name>anyWebApplication</module-name>
+        <module-type>war</module-type>
+    </module-override>
+    <module-override>
+        <module-name>anyResourceAdapter</module-name>
+        <module-type>rar</module-type>
+        <module-descriptor>
+            <uri></uri>
+            <insert type="insertAsFirstChildOf">
+                <xpath>/web-app</xpath>
+                <value>
+                    <env-entry xmlns="http://java.sun.com/xml/ns/javaee">
+                        <entry-name>name</entry-name>
+                        <entry-type>java.lang.String</entry-type>
+                    </env-entry>
+                </value>
+            </insert>
+        </module-descriptor>
+    </module-override>
+</deployment-plan>

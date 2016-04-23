@@ -29,9 +29,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.xml.XMLConstants;
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
+import java.util.Iterator;
 
 public class Replacer {
 
@@ -53,10 +56,12 @@ public class Replacer {
 
     public void apply(Insert insert) throws XPathExpressionException {
         String xpath = insert.getXpath();
-        XPath xPath = getXPath();
+        XPath xPath = getXPath((Node) insert.getValue());
         NodeList list = (NodeList) xPath.evaluate(xpath, document, XPathConstants.NODESET);
-        LOG.warn("XPATH '{}'does not match any node ", xpath);
         int length = list.getLength();
+        if (length == 0) {
+            LOG.warn("insert XPATH '{}'does not match any node ", xpath);
+        }
         for (int i = 0; i < length; i++) {
             Node item = list.item(i);
             if (insert.getValue() != null) {
@@ -65,16 +70,48 @@ public class Replacer {
         }
     }
 
-    protected XPath getXPath() {
-        return XMLFactory.newInstance().getXPathFactory().newXPath();
+    protected XPath getXPath(final Node node) {
+        XPath xPath = XMLFactory.newInstance().getXPathFactory().newXPath();
+        xPath.setNamespaceContext(new NamespaceContext() {
+            @Override
+            public String getNamespaceURI(String prefix) {
+                if (node != null) {
+                    if (prefix.equals(XMLConstants.DEFAULT_NS_PREFIX)) {
+                        String ns = node.getOwnerDocument().lookupNamespaceURI(null);
+                        LOG.debug("getNamespace for prefix '' {}", ns);
+                        return ns;
+                    } else {
+                        String ns = node.getOwnerDocument().lookupNamespaceURI(prefix);
+                        LOG.debug("getNamespace for prefix {} {}", prefix, ns);
+                        return ns;
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            public String getPrefix(String namespaceURI) {
+                System.out.println("xxxxx");
+                return null;
+            }
+
+            @Override
+            public Iterator getPrefixes(String namespaceURI) {
+                System.out.println("xxxxx");
+                return null;
+            }
+        });
+        return xPath;
     }
 
     public void apply(Replace replace) throws XPathExpressionException {
         String xpath = replace.getXpath();
-        XPath xPath = getXPath();
+        XPath xPath = getXPath((Node) replace.getValue());
         NodeList list = (NodeList) xPath.evaluate(xpath, document, XPathConstants.NODESET);
         int length = list.getLength();
-        LOG.warn("XPATH '{}'does not match any node ", xpath);
+        if (length == 0) {
+            LOG.warn("insert XPATH '{}'does not match any node ", xpath);
+        }
         for (int i = 0; i < length; i++) {
             Node item = list.item(i);
             if (replace.getValue() != null) {

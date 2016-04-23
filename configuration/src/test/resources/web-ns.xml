@@ -1,0 +1,11 @@
+<w:web-app xmlns:w="http://java.sun.com/xml/ns/javaee"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+	      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+           version="3.0">
+    <w:env-entry>
+        <w:env-entry-name>standard_env_entry</w:env-entry-name>
+        <w:env-entry-type>java.lang.String</w:env-entry-type>
+        <w:env-entry-value>old_env_entry</w:env-entry-value>
+    </w:env-entry>
+</w:web-app>
