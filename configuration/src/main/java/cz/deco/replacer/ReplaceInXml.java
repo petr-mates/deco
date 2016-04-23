@@ -21,6 +21,7 @@ package cz.deco.replacer;
  */
 
 
+import cz.deco.javaee.deployment_plan.InsertOperation;
 import cz.deco.javaee.deployment_plan.ReplaceOperation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,11 +30,28 @@ import org.w3c.dom.NodeList;
 
 public class ReplaceInXml {
 
+    private InsertIntoXml insertIntoXml = new InsertIntoXml();
+
     protected void replaceXml(Document document, Node where, ReplaceOperation type, Node what) {
         Element xml = (Element) what;
-        Node firstChild = xml.getFirstChild();
-        Node nodeToInsert = firstChild.cloneNode(true);
-        nodeToInsert = document.adoptNode(nodeToInsert);
+        NodeList nodeList = xml.getChildNodes();
+        Node firstChild = null;
+        for (int j = 0; j < nodeList.getLength(); j++) {
+            if (j == 0) {
+                firstChild = nodeList.item(j);
+                Node nodeToInsert = firstChild.cloneNode(true);
+                nodeToInsert = document.adoptNode(nodeToInsert);
+                firstChild = nodeToInsert;
+                replaceNode(where, type, nodeToInsert);
+            } else {
+                Node nodeToInsert = nodeList.item(j).cloneNode(true);
+                nodeToInsert = document.adoptNode(nodeToInsert);
+                insertIntoXml.insertIntoNode(firstChild, InsertOperation.INSERT_AFTER, nodeToInsert);
+            }
+        }
+    }
+
+    protected void replaceNode(Node where, ReplaceOperation type, Node nodeToInsert) {
         switch (type) {
             case CONTENT:
                 NodeList childNodes = where.getChildNodes();

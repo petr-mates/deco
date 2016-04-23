@@ -71,7 +71,7 @@ public class InsertIntoXmlTest {
     }
 
     @After
-    public void destroy() throws TransformerException, XPathExpressionException {
+    public void destroy() throws XPathExpressionException {
         Assert.assertNotNull(evalXpath("//nodeToInsert/following-sibling::nodeToInsert2"));
         //XMLTestSupport.printXml(document);
     }

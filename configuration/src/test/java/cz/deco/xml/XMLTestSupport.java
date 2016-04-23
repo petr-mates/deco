@@ -24,6 +24,7 @@ import org.w3c.dom.Document;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -32,13 +33,18 @@ import java.io.StringWriter;
 
 public class XMLTestSupport {
 
-    public static void printXml(Document doc) throws TransformerException {
-        Transformer transformer = TransformerFactory.newInstance().newTransformer();
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        StreamResult result = new StreamResult(new StringWriter());
-        DOMSource source = new DOMSource(doc);
-        transformer.transform(source, result);
-        String xmlString = result.getWriter().toString();
-        System.out.println(xmlString);
+    public static void printXml(Document doc) {
+        Transformer transformer = null;
+        try {
+            transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            StreamResult result = new StreamResult(new StringWriter());
+            DOMSource source = new DOMSource(doc);
+            transformer.transform(source, result);
+            String xmlString = result.getWriter().toString();
+            System.out.println(xmlString);
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
     }
 }

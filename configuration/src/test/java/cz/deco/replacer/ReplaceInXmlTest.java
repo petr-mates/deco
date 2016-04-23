@@ -22,7 +22,9 @@ package cz.deco.replacer;
 
 import cz.deco.javaee.deployment_plan.ReplaceOperation;
 import cz.deco.xml.XMLFactory;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -31,13 +33,16 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.io.StringReader;
 
 public class ReplaceInXmlTest {
 
     private Node getNodeToPlace() throws SAXException, IOException {
-        return XMLFactory.newInstance().getBuilderNs().parse(new InputSource(new StringReader("<xml><nodeToInsert/></xml>"))).getDocumentElement();
+        return XMLFactory.newInstance().getBuilderNs()
+                .parse(new InputSource(new StringReader("<xml><nodeToInsert/><nodeToInsert2/></xml>")))
+                .getDocumentElement();
     }
 
     private Document loadDocument() throws IOException, SAXException {
@@ -45,25 +50,44 @@ public class ReplaceInXmlTest {
         return builderNs.parse(this.getClass().getClassLoader().getResourceAsStream("test-document.xml"));
     }
 
+    protected Node getNodeByName(String name) {
+        return document.getElementsByTagName(name).item(0);
+    }
+
+    protected Node evalXpath(String xpath) throws XPathExpressionException {
+        return (Node) XMLFactory.newInstance().getXPathFactory()
+                .newXPath().evaluate(xpath, document, XPathConstants.NODE);
+    }
+
+    private ReplaceInXml replacer = new ReplaceInXml();
+    private Node parse;
+    private Document document;
+
+    @Before
+    public void init() throws Exception {
+        ReplaceInXml replacer = new ReplaceInXml();
+        parse = getNodeToPlace();
+        document = loadDocument();
+    }
+
+    @After
+    public void destroy() throws XPathExpressionException {
+        Assert.assertNotNull(evalXpath("//nodeToInsert/following-sibling::nodeToInsert2"));
+        //XMLTestSupport.printXml(document);
+    }
 
     @Test
     public void replaceContent() throws Exception {
-        ReplaceInXml replacer = new ReplaceInXml();
-        Node parse = getNodeToPlace();
-        Document document = loadDocument();
-        replacer.replaceXml(document, document.getElementsByTagName("node1").item(0), ReplaceOperation.CONTENT, parse);
-        Assert.assertNotNull(XMLFactory.newInstance().getXPathFactory().newXPath().evaluate("/test/node1/nodeToInsert", document, XPathConstants.NODE));
-        Assert.assertNull(XMLFactory.newInstance().getXPathFactory().newXPath().evaluate("/test/node1/node2", document, XPathConstants.NODE));
+        replacer.replaceXml(document, getNodeByName("node1"), ReplaceOperation.CONTENT, parse);
+        Assert.assertNotNull(evalXpath("/test/node1/nodeToInsert"));
+        Assert.assertNull(evalXpath("/test/node1/node2"));
     }
 
     @Test
     public void replaceEntireNode() throws Exception {
-        ReplaceInXml replacer = new ReplaceInXml();
-        Node parse = getNodeToPlace();
-        Document document = loadDocument();
-        replacer.replaceXml(document, document.getElementsByTagName("node1").item(0), ReplaceOperation.ENTIRE_NODE, parse);
-        Assert.assertNotNull(XMLFactory.newInstance().getXPathFactory().newXPath().evaluate("/test/nodeToInsert", document, XPathConstants.NODE));
-        Assert.assertNull(XMLFactory.newInstance().getXPathFactory().newXPath().evaluate("/test/node1", document, XPathConstants.NODE));
+        replacer.replaceXml(document, getNodeByName("node1"), ReplaceOperation.ENTIRE_NODE, parse);
+        Assert.assertNotNull(evalXpath("/test/nodeToInsert"));
+        Assert.assertNull(evalXpath("/test/node1"));
     }
 
 }
