@@ -23,17 +23,18 @@ package cz.deco;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class DeploymentPlanExceptionTest {
+public class DecoExceptionTest {
+
     @Test
     public void testDeploymentPlanExceptionMessage() {
-        DeploymentPlanException message = new DeploymentPlanException("message");
+        DecoException message = new DecoException("message");
         Assert.assertEquals("message", message.getMessage());
     }
 
     @Test
     public void testDeploymentPlanExceptionMessageCause() {
         Exception ex = new Exception();
-        DeploymentPlanException message = new DeploymentPlanException("message", ex);
+        DecoException message = new DecoException("message", ex);
         Assert.assertEquals("message", message.getMessage());
         Assert.assertSame(ex, message.getCause());
     }

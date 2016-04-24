@@ -20,7 +20,7 @@ package cz.deco.replacer;
  * #L%
  */
 
-import cz.deco.DeploymentPlanException;
+import cz.deco.DecoException;
 import cz.deco.javaee.deployment_plan.Insert;
 import cz.deco.javaee.deployment_plan.Replace;
 import cz.deco.xml.DecoContextNamespace;
@@ -73,7 +73,7 @@ public class Replacer {
         try {
             return xPath.evaluate(xpath, document, XPathConstants.NODESET);
         } catch (XPathExpressionException e) {
-            throw new DeploymentPlanException("Xpath error " + e.getLocalizedMessage(), e);
+            throw new DecoException("Xpath error " + e.getLocalizedMessage(), e);
         }
     }
 

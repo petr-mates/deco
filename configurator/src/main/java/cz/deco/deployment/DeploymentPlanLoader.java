@@ -21,7 +21,7 @@ package cz.deco.deployment;
  */
 
 
-import cz.deco.DeploymentPlanException;
+import cz.deco.DecoException;
 import cz.deco.javaee.deployment_plan.DeploymentPlan;
 import cz.deco.xml.XMLFactory;
 import org.slf4j.Logger;
@@ -55,7 +55,7 @@ public class DeploymentPlanLoader {
             return (DeploymentPlan) unmarshaller.unmarshal(input);
 
         } catch (JAXBException | IOException e) {
-            throw new DeploymentPlanException("cannot unmarshall deployment plan", e);
+            throw new DecoException("cannot unmarshall deployment plan", e);
         }
     }
 
@@ -77,12 +77,12 @@ public class DeploymentPlanLoader {
             validator = schema.newValidator();
             LOG.trace("xml validation OK");
         } catch (IOException | SAXException e) {
-            throw new DeploymentPlanException("error loading xml", e);
+            throw new DecoException("error loading xml", e);
         }
         try {
             validator.validate(new DOMSource(document));
         } catch (IOException | SAXException sex) {
-            throw new DeploymentPlanException("deployment plan validation exception ", sex);
+            throw new DecoException("deployment plan validation exception ", sex);
         }
     }
 }

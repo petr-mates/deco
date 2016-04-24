@@ -20,14 +20,13 @@ package cz.deco;
  * #L%
  */
 
+public class DecoException extends RuntimeException {
 
-public class DeploymentPlanException extends RuntimeException {
-
-    public DeploymentPlanException(String message) {
+    public DecoException(String message) {
         super(message);
     }
 
-    public DeploymentPlanException(String message, Throwable cause) {
+    public DecoException(String message, Throwable cause) {
         super(message, cause);
     }
 }
