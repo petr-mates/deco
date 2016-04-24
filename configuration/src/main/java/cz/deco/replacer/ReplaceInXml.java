@@ -69,6 +69,8 @@ public class ReplaceInXml {
             case ENTIRE_NODE:
                 where.getParentNode().replaceChild(nodeToInsert, where);
                 break;
+            default:
+                break;
         }
     }
 }

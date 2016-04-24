@@ -20,7 +20,6 @@ package cz.deco.el;
  * #L%
  */
 
-import cz.deco.javaee.deployment_plan.DeploymentPlan;
 import cz.deco.javaee.deployment_plan.VariableDefinition;
 
 import javax.el.ArrayELResolver;

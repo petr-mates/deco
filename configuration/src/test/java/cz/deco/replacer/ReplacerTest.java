@@ -66,7 +66,7 @@ public class ReplacerTest {
         insert.setXpath("/test");
         insert.setType(InsertOperation.INSERT_AS_FIRST_CHILD_OF);
         insert.setValue(elementToInsert);
-        replacer.setInserter(new InsertIntoXml() {
+        replacer.setInsertIntoXml(new InsertIntoXml() {
             @Override
             protected void insertXml(Document document, Node intoNode, InsertOperation type, Node what) {
                 detectInnerClass = new Object();
@@ -82,7 +82,7 @@ public class ReplacerTest {
         replace.setXpath("/test");
         replace.setType(ReplaceOperation.CONTENT);
         replace.setValue(elementToInsert);
-        replacer.setReplacer(new ReplaceInXml() {
+        replacer.setReplaceInXml(new ReplaceInXml() {
             @Override
             protected void replaceXml(Document document, Node intoNode, ReplaceOperation type, Node what) {
                 detectInnerClass = new Object();
@@ -98,7 +98,7 @@ public class ReplacerTest {
         replace.setXpath("/invalidXpath");
         replace.setType(ReplaceOperation.CONTENT);
         replace.setValue(elementToInsert);
-        replacer.setReplacer(new ReplaceInXml() {
+        replacer.setReplaceInXml(new ReplaceInXml() {
             @Override
             protected void replaceXml(Document document, Node intoNode, ReplaceOperation type, Node what) {
                 detectInnerClass = new Object();
@@ -113,7 +113,7 @@ public class ReplacerTest {
         replace.setXpath("/invalidXpath");
         replace.setType(ReplaceOperation.CONTENT);
         replace.setValue(null);
-        replacer.setReplacer(new ReplaceInXml() {
+        replacer.setReplaceInXml(new ReplaceInXml() {
             @Override
             protected void replaceXml(Document document, Node intoNode, ReplaceOperation type, Node what) {
                 detectInnerClass = new Object();
@@ -132,7 +132,7 @@ public class ReplacerTest {
         insert.setXpath("/w:web-app/w:env-entry");
         insert.setType(InsertOperation.INSERT_AS_FIRST_CHILD_OF);
         insert.setValue(elementToInsert);
-        replacer.setInserter(new InsertIntoXml() {
+        replacer.setInsertIntoXml(new InsertIntoXml() {
             @Override
             protected void insertXml(Document document, Node intoNode, InsertOperation type, Node what) {
                 detectInnerClass = new Object();

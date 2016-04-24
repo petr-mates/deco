@@ -41,9 +41,9 @@ public class Replacer {
 
     private Document document;
 
-    private ReplaceInXml replacer = new ReplaceInXml();
+    private ReplaceInXml replaceInXml = new ReplaceInXml();
 
-    private InsertIntoXml inserter = new InsertIntoXml();
+    private InsertIntoXml insertIntoXml = new InsertIntoXml();
 
     public void load() {
         //ToDo load document
@@ -64,7 +64,7 @@ public class Replacer {
         for (int i = 0; i < length; i++) {
             Node item = list.item(i);
             if (insert.getValue() != null) {
-                inserter.insertXml(document, item, insert.getType(), (Node) insert.getValue());
+                insertIntoXml.insertXml(document, item, insert.getType(), (Node) insert.getValue());
             }
         }
     }
@@ -94,7 +94,7 @@ public class Replacer {
         for (int i = 0; i < length; i++) {
             Node item = list.item(i);
             if (replace.getValue() != null) {
-                replacer.replaceXml(document, item, replace.getType(), (Node) replace.getValue());
+                replaceInXml.replaceXml(document, item, replace.getType(), (Node) replace.getValue());
             }
         }
     }
@@ -103,12 +103,12 @@ public class Replacer {
         this.document = document;
     }
 
-    protected void setInserter(InsertIntoXml inserter) {
-        this.inserter = inserter;
+    protected void setInsertIntoXml(InsertIntoXml insertIntoXml) {
+        this.insertIntoXml = insertIntoXml;
     }
 
-    protected void setReplacer(ReplaceInXml replacer) {
-        this.replacer = replacer;
+    protected void setReplaceInXml(ReplaceInXml replaceInXml) {
+        this.replaceInXml = replaceInXml;
     }
 
 }

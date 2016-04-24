@@ -20,9 +20,7 @@ package cz.deco.el;
  * #L%
  */
 
-import cz.deco.javaee.deployment_plan.DeploymentPlan;
 import cz.deco.javaee.deployment_plan.VariableDefinition;
-import cz.deco.javaee.deployment_plan.VariableDefinitions;
 
 import javax.el.ELContext;
 import javax.el.ELResolver;
@@ -55,10 +53,11 @@ public class VariableResolver extends ELResolver {
 
     @Override
     public Object getValue(ELContext elContext, Object base, Object property) {
-        if (base == null) {
-            base = variables;
+        Object currentBase = base;
+        if (currentBase == null) {
+            currentBase = variables;
         }
-        return delegate.getValue(elContext, base, property);
+        return delegate.getValue(elContext, currentBase, property);
     }
 
     @Override

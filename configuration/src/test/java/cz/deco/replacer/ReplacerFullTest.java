@@ -25,13 +25,10 @@ import cz.deco.deployment.DeploymentPlanLoader;
 import cz.deco.javaee.deployment_plan.DeploymentPlan;
 import cz.deco.javaee.deployment_plan.Insert;
 import cz.deco.xml.XMLFactory;
-import cz.deco.xml.XMLTestSupport;
-import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.util.List;
 

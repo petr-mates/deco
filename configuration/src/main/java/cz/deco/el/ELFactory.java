@@ -24,6 +24,10 @@ import javax.el.ExpressionFactory;
 
 public class ELFactory {
 
+    private ELFactory() {
+        super();
+    }
+
     public static ExpressionFactory getFactory() {
         return ExpressionFactory.newInstance();
     }

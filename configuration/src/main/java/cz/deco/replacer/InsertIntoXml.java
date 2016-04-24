@@ -82,6 +82,8 @@ public class InsertIntoXml {
                     intoNode.getParentNode().appendChild(nodeToInsert);
                 }
                 break;
+            default:
+                break;
         }
     }
 }

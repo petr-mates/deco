@@ -38,6 +38,12 @@ public class XMLFactory {
 
     private XPathFactory xPathFactory;
 
+    private XMLFactory() {
+        initJaxbContext();
+        initDocumentBuilder();
+        xPathFactory = XPathFactory.newInstance();
+    }
+
     public XPathFactory getXPathFactory() {
         return xPathFactory;
     }
@@ -52,12 +58,6 @@ public class XMLFactory {
 
     public JAXBContext getContext() {
         return context;
-    }
-
-    private XMLFactory() {
-        initJaxbContext();
-        initDocumentBuilder();
-        xPathFactory = XPathFactory.newInstance();
     }
 
     private void initJaxbContext() {
