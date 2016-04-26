@@ -20,12 +20,26 @@ package cz.deco;
  * #L%
  */
 
+/**
+ * Tool Exception
+ */
 public class DecoException extends RuntimeException {
 
+    /**
+     * Constructor with basic message.
+     *
+     * @param message
+     */
     public DecoException(String message) {
         super(message);
     }
 
+    /**
+     * constructor with message and cause throwable.
+     *
+     * @param message
+     * @param cause
+     */
     public DecoException(String message, Throwable cause) {
         super(message, cause);
     }

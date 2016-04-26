@@ -43,10 +43,19 @@ import javax.xml.validation.Validator;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Class to load and validate deployment plan. All validations on deployment plan should be done here.
+ */
 public class DeploymentPlanLoader {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeploymentPlanLoader.class);
 
+    /**
+     * load and call validation of the loaded deployment plan.
+     *
+     * @param plan
+     * @return
+     */
     public DeploymentPlan load(DeploymentPlanFile plan) {
         validatePlan(plan);
         JAXBContext context = XMLFactory.newInstance().getContext();
@@ -59,6 +68,11 @@ public class DeploymentPlanLoader {
         }
     }
 
+    /**
+     * do schema validation.
+     *
+     * @param plan
+     */
     protected void validatePlan(DeploymentPlanFile plan) {
 
         XMLFactory xmlFactory = XMLFactory.newInstance();

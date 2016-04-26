@@ -30,6 +30,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathFactory;
 import java.io.InputStream;
 
+/**
+ * Factory class for working with XML
+ */
 public class XMLFactory {
 
     private JAXBContext context;
@@ -44,18 +47,38 @@ public class XMLFactory {
         xPathFactory = XPathFactory.newInstance();
     }
 
+    /**
+     * return XPathFactory
+     *
+     * @return
+     */
     public XPathFactory getXPathFactory() {
         return xPathFactory;
     }
 
+    /**
+     * return new instance of the XMLFactory.
+     *
+     * @return
+     */
     public static XMLFactory newInstance() {
         return new XMLFactory();
     }
 
+    /**
+     * returns DocumentBuilder with setNamespaceAware On.
+     *
+     * @return
+     */
     public DocumentBuilder getBuilderNs() {
         return builderNs;
     }
 
+    /**
+     * returns jaxb content for deployment plan file.
+     *
+     * @return
+     */
     public JAXBContext getContext() {
         return context;
     }

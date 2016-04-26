@@ -31,6 +31,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * Implementation of the NamespaceContext. Class cache all xmlns prefixes and namespaces in the xml document.
+ */
 public class DecoContextNamespace implements NamespaceContext {
     private Map<String, String> prefixNs = new HashMap<>();
 

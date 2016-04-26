@@ -31,6 +31,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implementation of the ELResolver
+ */
 public class VariableResolver extends ELResolver {
 
     private Map<String, String> variables = new HashMap<>();

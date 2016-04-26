@@ -27,9 +27,8 @@ import cz.deco.javaee.deployment_plan.Insert;
 import cz.deco.xml.XMLFactory;
 import org.junit.Test;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.List;
 
 public class ReplacerFullTest {
@@ -37,13 +36,14 @@ public class ReplacerFullTest {
     private Replacer replacer;
 
     @Test
-    public void init() throws IOException, SAXException {
+    public void init() throws Exception {
         replacer = new Replacer();
         Document doc = XMLFactory.newInstance().getBuilderNs()
                 .parse("src/test/resources/test-web/WEB-INF/web.xml");
         replacer.setDocument(doc);
         DeploymentPlanLoader loder = new DeploymentPlanLoader();
-        DeploymentPlanFile deploymentPlanFile = new DeploymentPlanFile("src/test/resources/test-web/deployment-plan.xml");
+        DeploymentPlanFile deploymentPlanFile = new DeploymentPlanFile(
+                new File("src/test/resources/test-web/deployment-plan.xml").toURI());
         DeploymentPlan plan = loder.load(deploymentPlanFile);
         List<Object> insertOrReplace = plan.getModuleOverride().get(0).getModuleDescriptor().get(0).getInsertOrReplace();
         Insert insert = (Insert) insertOrReplace.get(0);

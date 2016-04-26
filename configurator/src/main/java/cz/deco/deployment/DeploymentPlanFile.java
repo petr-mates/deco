@@ -20,23 +20,43 @@ package cz.deco.deployment;
  * #L%
  */
 
-import java.io.File;
-import java.io.FileInputStream;
+import cz.deco.DecoException;
+
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 
+/**
+ * deployment plan value object.
+ */
 public class DeploymentPlanFile {
-    private String file;
+    private URI file;
 
-    public DeploymentPlanFile(String file) {
+    /**
+     * default constor with URI. URI is basic file locator.
+     *
+     * @param file
+     */
+    public DeploymentPlanFile(URI file) {
         this.file = file;
     }
 
-    public File getFile() {
-        return new File(file);
+    protected URI getFile() {
+        return file;
     }
 
-    public InputStream getInputStream() throws FileNotFoundException {
-        return new FileInputStream(getFile());
+    /**
+     * construct Input Stream for deployment plan
+     *
+     * @return new InputStream
+     * @throws FileNotFoundException
+     */
+    public InputStream getInputStream() {
+        try {
+            return file.toURL().openStream();
+        } catch (IOException e) {
+            throw new DecoException("cannot open stream for " + file, e);
+        }
     }
 }

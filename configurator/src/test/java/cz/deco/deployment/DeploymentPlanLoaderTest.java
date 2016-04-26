@@ -24,17 +24,21 @@ import cz.deco.javaee.deployment_plan.DeploymentPlan;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
+
 public class DeploymentPlanLoaderTest {
 
     @Test
     public void validatePlan() throws Exception {
-        DeploymentPlanFile deploymentPlanFile = new DeploymentPlanFile("src/test/resources/deployment-plan.xml");
+        DeploymentPlanFile deploymentPlanFile = new DeploymentPlanFile(
+                new File("src/test/resources/deployment-plan.xml").toURI());
         new DeploymentPlanLoader().validatePlan(deploymentPlanFile);
     }
 
     @Test
     public void load() throws Exception {
-        DeploymentPlanFile deploymentPlanFile = new DeploymentPlanFile("src/test/resources/deployment-plan.xml");
+        DeploymentPlanFile deploymentPlanFile = new DeploymentPlanFile(
+                new File("src/test/resources/deployment-plan.xml").toURI());
         DeploymentPlan load = new DeploymentPlanLoader().load(deploymentPlanFile);
         Assert.assertEquals("string", load.getApplicationName());
     }

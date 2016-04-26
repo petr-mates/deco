@@ -29,6 +29,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * Class should handle all insert operation on target xml file.
+ * Insert type are.<br>
+ * </uL>INSERT_AFTER selected node
+ * <uL>INSERT_BEFORE selected node
+ * <uL>INSERT_AS_FISRT_CHILD of the selected node
+ * <uL>INSERT_AS_LAST_CHILD of the selected node.
+ */
 public class InsertIntoXml {
     private static final Logger LOG = LoggerFactory.getLogger(InsertIntoXml.class);
 

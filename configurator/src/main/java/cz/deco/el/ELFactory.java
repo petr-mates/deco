@@ -22,12 +22,20 @@ package cz.deco.el;
 
 import javax.el.ExpressionFactory;
 
+/**
+ * helper class for Expression Language
+ */
 public class ELFactory {
 
     private ELFactory() {
         super();
     }
 
+    /**
+     * method creates Expression factory.
+     *
+     * @return Expression Factory
+     */
     public static ExpressionFactory getFactory() {
         return ExpressionFactory.newInstance();
     }

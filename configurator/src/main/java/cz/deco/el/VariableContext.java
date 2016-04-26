@@ -33,10 +33,18 @@ import javax.el.MapELResolver;
 import javax.el.VariableMapper;
 import java.util.List;
 
+/**
+ * Implementation of the ELContext.
+ */
 public class VariableContext extends ELContext {
 
     private CompositeELResolver resolver = new CompositeELResolver();
 
+    /**
+     * constructor with variable definition list
+     *
+     * @param variableList
+     */
     public VariableContext(List<VariableDefinition> variableList) {
         resolver.add(new VariableResolver(variableList));
         resolver.add(new ArrayELResolver());

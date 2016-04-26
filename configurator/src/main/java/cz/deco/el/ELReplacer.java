@@ -30,6 +30,9 @@ import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
 import java.util.List;
 
+/**
+ * Class do all stuff with xml Nodes and try to resolve all EL expressions.
+ */
 public class ELReplacer {
 
     private static final Logger LOG = LoggerFactory.getLogger(ELReplacer.class);
@@ -40,6 +43,11 @@ public class ELReplacer {
         context = new VariableContext(variables);
     }
 
+    /**
+     * walk through Node list and replace all expressions.
+     *
+     * @param nodes
+     */
     public void replaceText(NodeList nodes) {
         int length = nodes.getLength();
         for (int i = 0; i < length; i++) {
@@ -56,6 +64,12 @@ public class ELReplacer {
         }
     }
 
+    /**
+     * just evaluate expression.
+     *
+     * @param source
+     * @return
+     */
     protected String replaceText(String source) {
         ExpressionFactory factory = ELFactory.getFactory();
         ValueExpression ve = factory.createValueExpression(context, source, String.class);

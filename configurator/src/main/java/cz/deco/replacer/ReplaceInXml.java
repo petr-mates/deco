@@ -20,7 +20,6 @@ package cz.deco.replacer;
  * #L%
  */
 
-
 import cz.deco.javaee.deployment_plan.InsertOperation;
 import cz.deco.javaee.deployment_plan.ReplaceOperation;
 import org.slf4j.Logger;
@@ -30,6 +29,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * Class should handle all replace operation on target xml file.
+ * Replace type are.<BR>
+ * <uL>CONTENT of the selected node
+ * <uL>ENTIRE_NODE of the selected node.
+ */
 public class ReplaceInXml {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReplaceInXml.class);
