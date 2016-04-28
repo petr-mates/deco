@@ -45,14 +45,6 @@ public class Replacer {
 
     private InsertIntoXml insertIntoXml = new InsertIntoXml();
 
-    public void load() {
-        //ToDo load document
-    }
-
-    public void store() {
-        //ToDo store document
-    }
-
     public void apply(Insert insert) {
         String xpath = insert.getXpath();
         XPath xPath = getXPath((Node) insert.getValue());
