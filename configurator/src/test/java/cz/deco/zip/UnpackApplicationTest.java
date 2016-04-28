@@ -9,9 +9,9 @@ package cz.deco.zip;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,6 @@ package cz.deco.zip;
  * #L%
  */
 
-import org.hamcrest.BaseMatcher;
 import org.hamcrest.core.StringContains;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,7 +35,7 @@ import java.util.Map;
 
 public class UnpackApplicationTest {
     @Test
-    public void init() throws Exception {
+    public void unpack() throws Exception {
 
         UnpackApplication unpackApplication = new UnpackApplication();
         Path pathToApplication = Paths.get(new File("src/test/resources/zip-data/test-data.zip").toURI());
@@ -56,7 +55,7 @@ public class UnpackApplicationTest {
 
     public void pack(ZipDirectoryMapper mapper) throws Exception {
         Path path = Paths.get("/Volumes/Home/mates/github/xx");
-        PackApplication packApplication = new PackApplication(mapper, path);
+        PackApplication packApplication = new PackApplication(mapper);
         final Map<String, String> env = new HashMap<>();
         env.put("create", "true");
         FileSystem fileSystem = FileSystems.newFileSystem(URI.create("jar:file:/Volumes/Home/mates/github/xx.zip"), env);

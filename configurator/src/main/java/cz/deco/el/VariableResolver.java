@@ -70,6 +70,7 @@ public class VariableResolver extends ELResolver {
 
     @Override
     public void setValue(ELContext elContext, Object o, Object property, Object value) {
+        // No value set.
     }
 
     @Override

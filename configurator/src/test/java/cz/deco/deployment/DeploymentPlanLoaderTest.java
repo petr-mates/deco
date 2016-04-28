@@ -20,6 +20,7 @@ package cz.deco.deployment;
  * #L%
  */
 
+import cz.deco.DecoException;
 import cz.deco.javaee.deployment_plan.DeploymentPlan;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,6 +33,20 @@ public class DeploymentPlanLoaderTest {
     public void validatePlan() throws Exception {
         DeploymentPlanFile deploymentPlanFile = new DeploymentPlanFile(
                 new File("src/test/resources/deployment-plan.xml").toURI());
+        new DeploymentPlanLoader().validatePlan(deploymentPlanFile);
+    }
+
+    @Test(expected = DecoException.class)
+    public void validatePlanInvalidNoXml() throws Exception {
+        DeploymentPlanFile deploymentPlanFile = new DeploymentPlanFile(
+                new File("src/test/resources/no-xml.xml").toURI());
+        new DeploymentPlanLoader().validatePlan(deploymentPlanFile);
+    }
+
+    @Test(expected = DecoException.class)
+    public void validatePlanInvalid() throws Exception {
+        DeploymentPlanFile deploymentPlanFile = new DeploymentPlanFile(
+                new File("src/test/resources/invalid-deployment-plan.xml").toURI());
         new DeploymentPlanLoader().validatePlan(deploymentPlanFile);
     }
 
