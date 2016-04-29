@@ -36,7 +36,7 @@ public class ReplacerFullTest {
     private Replacer replacer;
 
     @Test
-    public void init() throws Exception {
+    public void loadAndReplace() throws Exception {
         replacer = new Replacer();
         Document doc = XMLFactory.newInstance().getBuilderNs()
                 .parse("src/test/resources/test-web/WEB-INF/web.xml");
@@ -45,7 +45,8 @@ public class ReplacerFullTest {
         DeploymentPlanFile deploymentPlanFile = new DeploymentPlanFile(
                 new File("src/test/resources/test-web/deployment-plan.xml").toURI());
         DeploymentPlan plan = loder.load(deploymentPlanFile);
-        List<Object> insertOrReplace = plan.getModuleOverride().get(0).getModuleDescriptor().get(0).getInsertOrReplace();
+        List<Object> insertOrReplace = plan.getDescriptorOverride().get(0).
+                getModuleDescriptor().get(0).getInsertOrReplace();
         Insert insert = (Insert) insertOrReplace.get(0);
         replacer.apply(insert);
         //XMLTestSupport.printXml(doc);

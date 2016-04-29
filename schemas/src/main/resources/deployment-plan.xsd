@@ -32,7 +32,7 @@
                     </xsd:annotation>
                 </xsd:element>
                 <xsd:element name="variable-definitions" type="tns:Variable-Definitions" minOccurs="0"/>
-                <xsd:element name="module-override" type="tns:Module-Override" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="descriptor-override" type="tns:Descriptor-Override" minOccurs="0" maxOccurs="unbounded"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -50,10 +50,10 @@
         </xsd:sequence>
     </xsd:complexType>
 
-    <xsd:complexType name="Module-Override">
+    <xsd:complexType name="Descriptor-Override">
         <xsd:sequence>
-            <xsd:element name="module-name" type="xsd:string"/>
-            <xsd:element name="module-type" type="xsd:string"/>
+            <xsd:group ref="tns:Description"/>
+            <xsd:element name="path" type="xsd:anyURI"/>
             <xsd:element name="module-descriptor" type="tns:Module-Descriptor" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>

@@ -46,7 +46,7 @@ public class JaxbMarshallerTest {
         try (InputStream xmlSource = classLoader.getResourceAsStream("deployment-plan.xml")) {
             DeploymentPlan plan = (DeploymentPlan) unmarshaller.unmarshal(xmlSource);
 
-            List<Object> insertOrReplace = plan.getModuleOverride().get(1).getModuleDescriptor().get(0).getInsertOrReplace();
+            List<Object> insertOrReplace = plan.getDescriptorOverride().get(1).getModuleDescriptor().get(0).getInsertOrReplace();
             Element xml = (Element) ((Replace) insertOrReplace.get(1)).getValue();
             Node item = xml.getChildNodes().item(0);
             Assert.assertEquals("env entry test", "env-entry", item.getLocalName());

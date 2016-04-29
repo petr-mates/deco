@@ -69,7 +69,7 @@ public class DeploymentPlanLoader {
     }
 
     /**
-     * do schema validation.DeploymentPlanLoader.java
+     * do schema validation.
      *
      * @param plan
      */

@@ -6,13 +6,11 @@
             <value>variable_value</value>
         </variable>
     </variable-definitions>
-    <module-override>
-        <module-name>anyWebApplication</module-name>
-        <module-type>war</module-type>
-    </module-override>
-    <module-override>
-        <module-name>anyResourceAdapter</module-name>
-        <module-type>rar</module-type>
+    <descriptor-override>
+        <path>anyWebApplication</path>
+    </descriptor-override>
+    <descriptor-override>
+        <path>anyResourceAdapter</path>
         <module-descriptor>
             <uri></uri>
             <insert type="insertAfter">
@@ -24,5 +22,5 @@
                 <value></value>
             </replace>
         </module-descriptor>
-    </module-override>
+    </descriptor-override>
 </deployment-plan>

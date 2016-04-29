@@ -7,23 +7,23 @@
             <value>variable_value</value>
         </variable>
     </variable-definitions>
-    <module-override>
-        <module-name>anyWebApplication</module-name>
-        <module-type>war</module-type>
-    </module-override>
-    <module-override>
-        <module-name>anyResourceAdapter</module-name>
-        <module-type>rar</module-type>
+    <descriptor-override>
+        <path></path>
+    </descriptor-override>
+    <descriptor-override>
+        <path>**/*.java</path>
         <module-descriptor>
-            <uri></uri>
+            <uri>/**/*.java</uri>
             <insert type="insertAfter">
                 <xpath></xpath>
                 <value>${value}</value>
             </insert>
             <replace type="content">
                 <xpath></xpath>
-                <value><xmlValue/></value>
+                <value>
+                    <xmlValue/>
+                </value>
             </replace>
         </module-descriptor>
-    </module-override>
+    </descriptor-override>
 </deployment-plan>

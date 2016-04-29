@@ -22,17 +22,19 @@ package cz.deco.zip;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ZipDirectoryMapper {
+public class ZipDirectoryMapper implements Iterable<Map.Entry<String, FileEntry>> {
 
     private Map<String, FileEntry> zipFileMap = new LinkedHashMap<>();
     private Map<String, String> fileZipMap = new HashMap<>();
 
     public void put(Path zipEntry, Path filePath, EntryType type) {
-        zipFileMap.put(zipEntry.toString(), new FileEntry(filePath.toString(), type));
+        zipFileMap.put(zipEntry.toString(), new FileEntryImpl(filePath.toString(), type));
         fileZipMap.put(filePath.toString(), zipEntry.toString());
     }
 
@@ -40,7 +42,7 @@ public class ZipDirectoryMapper {
         for (Map.Entry<String, FileEntry> stringFileEntryEntry : mapper.zipFileMap.entrySet()) {
             String newZipEntry = zipEntry + stringFileEntryEntry.getKey();
             String newFileName = stringFileEntryEntry.getValue().getFileName();
-            zipFileMap.put(newZipEntry, new FileEntry(newFileName, stringFileEntryEntry.getValue().getEntryType()));
+            zipFileMap.put(newZipEntry, new FileEntryImpl(newFileName, stringFileEntryEntry.getValue().getEntryType()));
             fileZipMap.put(newFileName, newZipEntry);
         }
     }
@@ -62,13 +64,18 @@ public class ZipDirectoryMapper {
         return fileEntry.getEntryType();
     }
 
-    private class FileEntry {
+    @Override
+    public Iterator<Map.Entry<String, FileEntry>> iterator() {
+        return Collections.unmodifiableMap(zipFileMap).entrySet().iterator();
+    }
+
+    private class FileEntryImpl implements FileEntry {
 
         private String fileName;
 
         private EntryType entryType;
 
-        private FileEntry(String fileName, EntryType entryType) {
+        private FileEntryImpl(String fileName, EntryType entryType) {
             this.fileName = fileName;
             this.entryType = entryType;
         }
