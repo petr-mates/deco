@@ -51,6 +51,20 @@ public class DecoPathMatcherTest {
     }
 
     @Test
+    public void findByPathNone() throws Exception {
+        DecoPathMatcher decoPathMatcher = new DecoPathMatcher(mapper);
+        List<FileEntry> byPath = decoPathMatcher.findByPath("persistence.xml");
+        Assert.assertEquals(0, byPath.size());
+    }
+
+    @Test
+    public void findByPathNode() throws Exception {
+        DecoPathMatcher decoPathMatcher = new DecoPathMatcher(new ZipDirectoryMapper());
+        List<FileEntry> byPath = decoPathMatcher.findByPath("persistence.xml");
+        Assert.assertEquals(0, byPath.size());
+    }
+
+    @Test
     public void findByPathOne() throws Exception {
         DecoPathMatcher decoPathMatcher = new DecoPathMatcher(mapper);
         List<FileEntry> byPath = decoPathMatcher.findByPath("conf/**/persistence.xml");

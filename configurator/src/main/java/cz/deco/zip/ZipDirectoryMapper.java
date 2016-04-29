@@ -38,9 +38,9 @@ public class ZipDirectoryMapper implements Iterable<Map.Entry<String, FileEntry>
         fileZipMap.put(filePath.toString(), zipEntry.toString());
     }
 
-    public void putAll(String zipEntry, ZipDirectoryMapper mapper) {
+    public void putAll(Path zipEntry, ZipDirectoryMapper mapper) {
         for (Map.Entry<String, FileEntry> stringFileEntryEntry : mapper.zipFileMap.entrySet()) {
-            String newZipEntry = zipEntry + stringFileEntryEntry.getKey();
+            String newZipEntry = zipEntry.toString() + stringFileEntryEntry.getKey();
             String newFileName = stringFileEntryEntry.getValue().getFileName();
             zipFileMap.put(newZipEntry, new FileEntryImpl(newFileName, stringFileEntryEntry.getValue().getEntryType()));
             fileZipMap.put(newFileName, newZipEntry);
@@ -80,10 +80,12 @@ public class ZipDirectoryMapper implements Iterable<Map.Entry<String, FileEntry>
             this.entryType = entryType;
         }
 
+        @Override
         public EntryType getEntryType() {
             return entryType;
         }
 
+        @Override
         public String getFileName() {
             return fileName;
         }

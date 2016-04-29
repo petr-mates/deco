@@ -20,11 +20,14 @@ package cz.deco.zip;
  * #L%
  */
 
+import org.apache.commons.io.FileUtils;
 import org.hamcrest.core.StringContains;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -34,13 +37,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UnpackApplicationTest {
-    @Test
-    public void unpack() throws Exception {
 
+    private File targetDir;
+
+    @Before
+    public void init() throws IOException {
+        targetDir = new File("target/test-data.zip/out/");
+        FileUtils.deleteDirectory(targetDir);
+        targetDir.mkdirs();
+    }
+
+    @Test
+    public void unpackAndPack() throws Exception {
         UnpackApplication unpackApplication = new UnpackApplication();
         Path pathToApplication = Paths.get(new File("src/test/resources/zip-data/test-data.zip").toURI());
-        File targetDir = new File("target/test-data.zip/");
-        targetDir.mkdirs();
 
         ZipDirectoryMapper mapper = unpackApplication.unpackZip(pathToApplication, Paths.get(targetDir.toURI()));
         String resultString = mapper.toString();
@@ -51,14 +61,17 @@ public class UnpackApplicationTest {
         Assert.assertThat(resultString, StringContains.containsString("/configurator/target/configurator-0.0.1-SNAPSHOT.jar/META-INF/"));
         Assert.assertThat(resultString, StringContains.containsString("/inner.zip"));
         Assert.assertThat(resultString, StringContains.containsString("/configurator/pom.xml"));
+
+        pack(mapper);
     }
 
     public void pack(ZipDirectoryMapper mapper) throws Exception {
-        Path path = Paths.get("/Volumes/Home/mates/github/xx");
+        Path path = Paths.get(targetDir.toURI());
         PackApplication packApplication = new PackApplication(mapper);
         final Map<String, String> env = new HashMap<>();
         env.put("create", "true");
-        FileSystem fileSystem = FileSystems.newFileSystem(URI.create("jar:file:/Volumes/Home/mates/github/xx.zip"), env);
+        FileSystem fileSystem = FileSystems.newFileSystem(
+                URI.create("jar:file:" + new File("target/test-data.zip/out.zip").getAbsolutePath()), env);
         packApplication.pack(path, fileSystem);
         fileSystem.close();
     }

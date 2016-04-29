@@ -66,8 +66,7 @@ public class UnpackApplication {
             Path newZipDirectory = Paths.get(innerZip.toString() + postfix);
             Files.createDirectories(newZipDirectory);
             ZipDirectoryMapper mapper = unpack(rootDirectory, newZipDirectory.toString());
-            String sourceString = source.toString();
-            currentMapper.putAll(sourceString, mapper);
+            currentMapper.putAll(source, mapper);
             return newZipDirectory;
         } finally {
             Files.delete(innerZip);
