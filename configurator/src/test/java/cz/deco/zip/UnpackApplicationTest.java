@@ -28,12 +28,9 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 public class UnpackApplicationTest {
@@ -68,11 +65,7 @@ public class UnpackApplicationTest {
     public void pack(ZipDirectoryMapper mapper) throws Exception {
         Path path = Paths.get(targetDir.toURI());
         PackApplication packApplication = new PackApplication(mapper);
-        final Map<String, String> env = new HashMap<>();
-        env.put("create", "true");
-        FileSystem fileSystem = FileSystems.newFileSystem(
-                URI.create("jar:file:" + new File("target/test-data.zip/out.zip").getAbsolutePath()), env);
-        packApplication.pack(path, fileSystem);
-        fileSystem.close();
+        packApplication.createZip(path, new File("target/test-data.zip/out.zip").getAbsoluteFile().toPath());
+        final Map<String, String> env = Collections.singletonMap("create", "true");
     }
 }

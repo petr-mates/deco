@@ -12,7 +12,6 @@
     <descriptor-override>
         <path>anyResourceAdapter</path>
         <module-descriptor>
-            <uri></uri>
             <insert type="insertAsFirstChildOf">
                 <xpath>/w:web-app</xpath>
                 <value>

@@ -51,15 +51,14 @@ public class PackApplication {
         Files.walkFileTree(directory, new PathFileVisitor(fs, directory));
     }
 
-    public Path createZip(Path newZip, String originalName) throws IOException {
-        Path path = Paths.get(newZip.getParent().toString(), originalName);
-        URI newJarFile = URI.create("jar:file:" + path.toString());
+    public Path createZip(Path sourceDirectory, Path targetZip) throws IOException {
+        URI newJarFile = URI.create("jar:file:" + targetZip.toString());
         LOG.debug("new jar file {}", newJarFile);
         try (FileSystem fileSystem = FileSystems.newFileSystem(newJarFile,
                 Collections.singletonMap("create", "true"))) {
-            pack(newZip, fileSystem);
+            pack(sourceDirectory, fileSystem);
         }
-        return path;
+        return targetZip;
     }
 
     private class PathFileVisitor implements FileVisitor<Path> {
@@ -83,7 +82,7 @@ public class PackApplication {
             LOG.debug("directory {}", dir);
 
             if (mapper.getOriginType(dir) == EntryType.ZIP) {
-                Path newZip = createZip(dir, mapper.getOriginName(dir));
+                Path newZip = createZip(dir, Paths.get(dir.getParent().toString(), mapper.getOriginName(dir)));
                 visitFile(newZip, null);
                 return FileVisitResult.SKIP_SUBTREE;
             }

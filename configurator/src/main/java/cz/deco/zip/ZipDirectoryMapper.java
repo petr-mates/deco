@@ -41,7 +41,7 @@ public class ZipDirectoryMapper implements Iterable<Map.Entry<String, FileEntry>
     public void putAll(Path zipEntry, ZipDirectoryMapper mapper) {
         for (Map.Entry<String, FileEntry> stringFileEntryEntry : mapper.zipFileMap.entrySet()) {
             String newZipEntry = zipEntry.toString() + stringFileEntryEntry.getKey();
-            String newFileName = stringFileEntryEntry.getValue().getFileName();
+            String newFileName = stringFileEntryEntry.getValue().getFilePath();
             zipFileMap.put(newZipEntry, new FileEntryImpl(newFileName, stringFileEntryEntry.getValue().getEntryType()));
             fileZipMap.put(newFileName, newZipEntry);
         }
@@ -71,12 +71,12 @@ public class ZipDirectoryMapper implements Iterable<Map.Entry<String, FileEntry>
 
     private class FileEntryImpl implements FileEntry {
 
-        private String fileName;
+        private String filePath;
 
         private EntryType entryType;
 
-        private FileEntryImpl(String fileName, EntryType entryType) {
-            this.fileName = fileName;
+        private FileEntryImpl(String filePath, EntryType entryType) {
+            this.filePath = filePath;
             this.entryType = entryType;
         }
 
@@ -86,8 +86,8 @@ public class ZipDirectoryMapper implements Iterable<Map.Entry<String, FileEntry>
         }
 
         @Override
-        public String getFileName() {
-            return fileName;
+        public String getFilePath() {
+            return filePath;
         }
     }
 
@@ -99,7 +99,7 @@ public class ZipDirectoryMapper implements Iterable<Map.Entry<String, FileEntry>
             sb.append("zip: ");
             sb.append(stringFileEntryEntry.getKey());
             sb.append(" value: ");
-            sb.append(stringFileEntryEntry.getValue().getFileName());
+            sb.append(stringFileEntryEntry.getValue().getFilePath());
             sb.append(" type: ");
             sb.append(stringFileEntryEntry.getValue().getEntryType());
             sb.append(")\n");

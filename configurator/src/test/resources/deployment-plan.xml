@@ -14,7 +14,6 @@
     <descriptor-override>
         <path>anyResourceAdapter</path>
         <module-descriptor>
-            <uri></uri>
             <insert type="insertAfter">
                 <xpath></xpath>
                 <value></value>

@@ -116,7 +116,7 @@ public class UnpackApplication {
             LOG.debug("create file {} ", file);
             Path targetZip = resolvePath(file);
             Files.copy(file, targetZip, StandardCopyOption.REPLACE_EXISTING);
-            if (isZip(file)) {
+            if (ZipUtils.isZip(file)) {
                 Path dirPath = unpackInnerZip(file, targetZip, mapper);
                 mapper.put(file, dirPath, EntryType.ZIP);
             } else {

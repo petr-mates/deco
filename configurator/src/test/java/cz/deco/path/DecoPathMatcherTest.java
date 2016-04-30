@@ -69,6 +69,6 @@ public class DecoPathMatcherTest {
         DecoPathMatcher decoPathMatcher = new DecoPathMatcher(mapper);
         List<FileEntry> byPath = decoPathMatcher.findByPath("conf/**/persistence.xml");
         Assert.assertEquals(1, byPath.size());
-        Assert.assertEquals("conf/test.zip/persistence.xml", byPath.get(0).getFileName());
+        Assert.assertEquals("conf/test.zip/persistence.xml", byPath.get(0).getFilePath());
     }
 }

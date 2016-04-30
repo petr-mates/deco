@@ -23,5 +23,5 @@ package cz.deco.zip;
 public interface FileEntry {
     EntryType getEntryType();
 
-    String getFileName();
+    String getFilePath();
 }

@@ -13,7 +13,6 @@
     <descriptor-override>
         <path>**/*.java</path>
         <module-descriptor>
-            <uri>/**/*.java</uri>
             <insert type="insertAfter">
                 <xpath></xpath>
                 <value>${value}</value>
