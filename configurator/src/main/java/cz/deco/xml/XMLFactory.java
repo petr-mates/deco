@@ -27,6 +27,9 @@ import javax.xml.bind.JAXBException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.xpath.XPathFactory;
 import java.io.InputStream;
 
@@ -103,5 +106,19 @@ public class XMLFactory {
 
     public InputStream getSchemaStream() {
         return Thread.currentThread().getContextClassLoader().getResourceAsStream("deployment-plan.xsd");
+    }
+
+
+    /**
+     * returns basic XML Transformer.
+     *
+     * @return
+     */
+    public Transformer getTransformerFactory() {
+        try {
+            return TransformerFactory.newInstance().newTransformer();
+        } catch (TransformerConfigurationException e) {
+            throw new IllegalStateException("error creating transformer factory", e);
+        }
     }
 }

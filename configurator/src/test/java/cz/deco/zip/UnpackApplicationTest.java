@@ -50,7 +50,7 @@ public class UnpackApplicationTest {
     @Test
     public void unpackAndPack() throws Exception {
         UnpackApplication unpackApplication = new UnpackApplication();
-        Path pathToApplication = Paths.get(new File("src/test/resources/zip-data/test-data.zip").toURI());
+        Path pathToApplication = new File("src/test/resources/zip-data/test-data.zip").toPath();
 
         ZipDirectoryMapper mapper = unpackApplication.unpackZip(pathToApplication, Paths.get(targetDir.toURI()));
         String resultString = mapper.toString();

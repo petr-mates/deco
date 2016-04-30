@@ -1,4 +1,6 @@
-<deployment-plan xmlns="http://javaee.deco.cz/deployment-plan" xmlns:w="http://java.sun.com/xml/ns/javaee">
+<deployment-plan xmlns="http://javaee.deco.cz/deployment-plan"
+                 xmlns:w="http://java.sun.com/xml/ns/javaee"
+                 version="1.0">
     <application-name>test-web</application-name>
     <variable-definitions>
         <variable>

@@ -1,4 +1,5 @@
-<deployment-plan xmlns="http://javaee.deco.cz/deployment-plan">
+<deployment-plan xmlns="http://javaee.deco.cz/deployment-plan"
+                 version="1.0">
     <application-name>string</application-name>
     <variable-definitions>
         <variable>

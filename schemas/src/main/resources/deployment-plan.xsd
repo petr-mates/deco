@@ -32,8 +32,14 @@
                     </xsd:annotation>
                 </xsd:element>
                 <xsd:element name="variable-definitions" type="tns:Variable-Definitions" minOccurs="0"/>
-                <xsd:element name="descriptor-override" type="tns:Descriptor-Override" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="descriptor-override" type="tns:Descriptor-Override" minOccurs="0"
+                             maxOccurs="unbounded"/>
             </xsd:sequence>
+            <xsd:attribute name="version"
+                           type="xsd:decimal"
+                           fixed="1.0"
+                           use="optional">
+            </xsd:attribute>
         </xsd:complexType>
     </xsd:element>
 
