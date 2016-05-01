@@ -60,7 +60,6 @@ public class Application {
         ZipDirectoryMapper mapper = unpack(applicationArchive, tempDir);
         DecoPathMatcher pathMatcher = new DecoPathMatcher(mapper);
 
-
         List<DescriptorOverride> descriptors = plan.getDescriptorOverride();
         for (DescriptorOverride descriptor : descriptors) {
             String path = descriptor.getPath();
