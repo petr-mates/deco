@@ -44,11 +44,13 @@ public class ReplacerTest {
     private Element elementToInsert;
     private Replace replace = new Replace();
     private Insert insert = new Insert();
+    private Document document;
 
     @Before
     public void init() throws IOException, SAXException {
         detectInnerClass = null;
-        replacer.setDocument(loadDocument());
+        document = loadDocument();
+
         elementToInsert = loadDocument().createElement("elementToInsert");
     }
 
@@ -73,7 +75,7 @@ public class ReplacerTest {
                 Assert.assertSame(what, elementToInsert);
             }
         });
-        replacer.apply(insert);
+        replacer.apply(document, insert);
         Assert.assertNotNull(detectInnerClass);
     }
 
@@ -89,7 +91,7 @@ public class ReplacerTest {
                 Assert.assertSame(what, elementToInsert);
             }
         });
-        replacer.apply(replace);
+        replacer.apply(document, replace);
         Assert.assertNotNull(detectInnerClass);
     }
 
@@ -104,7 +106,7 @@ public class ReplacerTest {
                 detectInnerClass = new Object();
             }
         });
-        replacer.apply(replace);
+        replacer.apply(document, replace);
         Assert.assertNull(detectInnerClass);
     }
 
@@ -119,7 +121,7 @@ public class ReplacerTest {
                 detectInnerClass = new Object();
             }
         });
-        replacer.apply(replace);
+        replacer.apply(document, replace);
         Assert.assertNull(detectInnerClass);
     }
 
@@ -127,8 +129,7 @@ public class ReplacerTest {
     public void applyReplaceXmlNSAware() throws Exception {
         Element elementToInsert = loadDocument("web-ns.xml")
                 .createElementNS("http://java.sun.com/xml/ns/javaee", "elementToInsert");
-        Document document = loadDocument("web-ns.xml");
-        replacer.setDocument(document);
+        Document localDocument = loadDocument("web-ns.xml");
         insert.setXpath("/w:web-app/w:env-entry");
         insert.setType(InsertOperation.INSERT_AS_FIRST_CHILD_OF);
         insert.setValue(elementToInsert);
@@ -138,7 +139,7 @@ public class ReplacerTest {
                 detectInnerClass = new Object();
             }
         });
-        replacer.apply(insert);
+        replacer.apply(localDocument, insert);
         Assert.assertNotNull(detectInnerClass);
     }
 }

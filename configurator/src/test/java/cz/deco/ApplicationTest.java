@@ -20,7 +20,12 @@ package cz.deco;
  * #L%
  */
 
+import cz.deco.core.DecoContextImpl;
 import cz.deco.core.DecoException;
+import cz.deco.deployment.DeploymentPlanFile;
+import cz.deco.deployment.DeploymentPlanLoader;
+import cz.deco.el.PlanELResolver;
+import cz.deco.javaee.deployment_plan.DeploymentPlan;
 import cz.deco.zip.PackApplication;
 import cz.deco.zip.UnpackApplication;
 import org.junit.Test;
@@ -32,6 +37,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ApplicationTest {
@@ -40,10 +46,16 @@ public class ApplicationTest {
     private PackApplication pack;
 
     @Mock
-    Path path;
+    private Path path;
 
     @Mock
     private UnpackApplication unpack;
+
+    @Mock
+    private DeploymentPlanLoader planLoader;
+
+    @Mock
+    private PlanELResolver planELResolver;
 
     @InjectMocks
     private Application application;
@@ -72,5 +84,31 @@ public class ApplicationTest {
     public void unpackException() throws Exception {
         Mockito.when(unpack.unpackZip(path, path)).thenThrow(new IOException());
         application.unpack(path, path);
+    }
+
+    @Test(expected = DecoException.class)
+    public void testCheckArchive() {
+        application.checkArchive(Paths.get("test/x"));
+    }
+
+
+    @InjectMocks
+    Application applicationDoWork = new Application() {
+        @Override
+        protected void checkArchive(Path applicationArchive) {
+        }
+
+        @Override
+        protected void packApplicationArchive(Path tempDir, Path outputZip, PackApplication pack) {
+        }
+    };
+
+    @Test
+    public void testDoWork() {
+        DecoContextImpl decoContext = new DecoContextImpl();
+        Mockito.when(planLoader.load((DeploymentPlanFile) Mockito.any())).thenReturn(Mockito.mock(DeploymentPlan.class));
+
+        decoContext.setDeploymentPlan(path);
+        applicationDoWork.doWork(decoContext);
     }
 }

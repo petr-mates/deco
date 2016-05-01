@@ -40,7 +40,6 @@ public class ReplacerFullTest {
         replacer = new Replacer();
         Document doc = XMLFactory.newInstance().getBuilderNs()
                 .parse("src/test/resources/test-web/WEB-INF/web.xml");
-        replacer.setDocument(doc);
         DeploymentPlanLoader loder = new DeploymentPlanLoader();
         DeploymentPlanFile deploymentPlanFile = new DeploymentPlanFile(
                 new File("src/test/resources/test-web/deployment-plan.xml").toURI());
@@ -48,7 +47,7 @@ public class ReplacerFullTest {
         List<Object> insertOrReplace = plan.getDescriptorOverride().get(0).
                 getModuleDescriptor().get(0).getInsertOrReplace();
         Insert insert = (Insert) insertOrReplace.get(0);
-        replacer.apply(insert);
+        replacer.apply(doc, insert);
         //XMLTestSupport.printXml(doc);
     }
 }

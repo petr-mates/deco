@@ -21,7 +21,9 @@ package cz.deco.replacer;
  */
 
 import cz.deco.core.DecoException;
+import cz.deco.javaee.deployment_plan.DescriptorOverride;
 import cz.deco.javaee.deployment_plan.Insert;
+import cz.deco.javaee.deployment_plan.ModuleDescriptor;
 import cz.deco.javaee.deployment_plan.Replace;
 import cz.deco.xml.DecoContextNamespace;
 import cz.deco.xml.XMLFactory;
@@ -34,24 +36,37 @@ import org.w3c.dom.NodeList;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
+import java.util.List;
 
 public class Replacer {
 
     private static final Logger LOG = LoggerFactory.getLogger(Replacer.class);
 
-    private Document document;
-
     private ReplaceInXml replaceInXml = new ReplaceInXml();
 
     private InsertIntoXml insertIntoXml = new InsertIntoXml();
 
-    public void apply(Insert insert) {
-        String xpath = insert.getXpath();
+    public void apply(Document document, DescriptorOverride descriptor) {
+        for (ModuleDescriptor moduleDescriptor : descriptor.getModuleDescriptor()) {
+            List<Object> insertOrReplace = moduleDescriptor.getInsertOrReplace();
+            for (Object object : insertOrReplace) {
+                if (object instanceof Insert) {
+                    apply(document, (Insert) object);
+                }
+                if (object instanceof Replace) {
+                    apply(document, (Replace) object);
+                }
+            }
+        }
+    }
+
+    public void apply(Document document, Insert insert) {
+        String xpathExpression = insert.getXpath();
         XPath xPath = getXPath((Node) insert.getValue());
-        NodeList list = (NodeList) evaluate(xpath, xPath);
+        NodeList list = (NodeList) evaluate(xpathExpression, xPath, document);
         int length = list.getLength();
         if (length == 0) {
-            LOG.warn("insert XPATH '{}'does not match any node ", xpath);
+            LOG.warn("insert XPATH '{}'does not match any node ", xpathExpression);
         }
         for (int i = 0; i < length; i++) {
             Node item = list.item(i);
@@ -61,24 +76,10 @@ public class Replacer {
         }
     }
 
-    protected Object evaluate(String xpath, XPath xPath) {
-        try {
-            return xPath.evaluate(xpath, document, XPathConstants.NODESET);
-        } catch (XPathExpressionException e) {
-            throw new DecoException("Xpath error " + e.getLocalizedMessage(), e);
-        }
-    }
-
-    protected XPath getXPath(final Node node) {
-        XPath xPath = XMLFactory.newInstance().getXPathFactory().newXPath();
-        xPath.setNamespaceContext(new DecoContextNamespace(node));
-        return xPath;
-    }
-
-    public void apply(Replace replace) {
+    public void apply(Document document, Replace replace) {
         String xpath = replace.getXpath();
         XPath xPath = getXPath((Node) replace.getValue());
-        NodeList list = (NodeList) evaluate(xpath, xPath);
+        NodeList list = (NodeList) evaluate(xpath, xPath, document);
         int length = list.getLength();
         if (length == 0) {
             LOG.warn("insert XPATH '{}'does not match any node ", xpath);
@@ -91,9 +92,20 @@ public class Replacer {
         }
     }
 
-    protected void setDocument(Document document) {
-        this.document = document;
+    protected Object evaluate(String xpathExpression, XPath xPath, Document document) {
+        try {
+            return xPath.evaluate(xpathExpression, document, XPathConstants.NODESET);
+        } catch (XPathExpressionException e) {
+            throw new DecoException("Xpath error " + e.getLocalizedMessage(), e);
+        }
     }
+
+    protected XPath getXPath(final Node node) {
+        XPath xPath = XMLFactory.newInstance().getXPathFactory().newXPath();
+        xPath.setNamespaceContext(new DecoContextNamespace(node));
+        return xPath;
+    }
+
 
     protected void setInsertIntoXml(InsertIntoXml insertIntoXml) {
         this.insertIntoXml = insertIntoXml;
