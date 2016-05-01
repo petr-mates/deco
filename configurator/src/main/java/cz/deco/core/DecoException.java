@@ -1,4 +1,4 @@
-package cz.deco;
+package cz.deco.core;
 
 /*
  * #%L

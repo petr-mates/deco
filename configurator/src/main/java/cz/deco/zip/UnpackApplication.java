@@ -35,7 +35,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Random;
-import java.util.zip.ZipInputStream;
 
 public class UnpackApplication {
 
@@ -77,15 +76,6 @@ public class UnpackApplication {
         byte[] bytes = new byte[5];
         RANDOM.nextBytes(bytes);
         return "." + new BigInteger(bytes).abs().toString(16);
-    }
-
-    protected boolean isZip(Path maybeZip) {
-        try (ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(maybeZip))) {
-            return zipInputStream.getNextEntry() != null;
-        } catch (IOException e) {
-            LOG.error("error opening zip inputstream {}", e, null);
-        }
-        return false;
     }
 
     private class PathFileVisitor implements FileVisitor<Path> {

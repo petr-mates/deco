@@ -21,7 +21,7 @@ package cz.deco.deployment;
  */
 
 
-import cz.deco.DecoException;
+import cz.deco.core.DecoException;
 import cz.deco.javaee.deployment_plan.DeploymentPlan;
 import cz.deco.xml.XMLFactory;
 import org.slf4j.Logger;

@@ -20,7 +20,7 @@ package cz.deco.deployment;
  * #L%
  */
 
-import cz.deco.DecoException;
+import cz.deco.core.DecoException;
 import cz.deco.javaee.deployment_plan.DeploymentPlan;
 import org.junit.Assert;
 import org.junit.Test;

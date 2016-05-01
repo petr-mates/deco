@@ -20,7 +20,7 @@ package cz.deco.descriptor;
  * #L%
  */
 
-import cz.deco.DecoException;
+import cz.deco.core.DecoException;
 import cz.deco.xml.XMLFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

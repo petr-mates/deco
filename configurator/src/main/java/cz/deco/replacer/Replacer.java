@@ -20,7 +20,7 @@ package cz.deco.replacer;
  * #L%
  */
 
-import cz.deco.DecoException;
+import cz.deco.core.DecoException;
 import cz.deco.javaee.deployment_plan.Insert;
 import cz.deco.javaee.deployment_plan.Replace;
 import cz.deco.xml.DecoContextNamespace;

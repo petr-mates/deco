@@ -20,7 +20,7 @@ package cz.deco.deployment;
  * #L%
  */
 
-import cz.deco.DecoException;
+import cz.deco.core.DecoException;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
