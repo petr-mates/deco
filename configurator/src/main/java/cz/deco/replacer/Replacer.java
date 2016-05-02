@@ -105,14 +105,4 @@ public class Replacer {
         xPath.setNamespaceContext(new DecoContextNamespace(node));
         return xPath;
     }
-
-
-    protected void setInsertIntoXml(InsertIntoXml insertIntoXml) {
-        this.insertIntoXml = insertIntoXml;
-    }
-
-    protected void setReplaceInXml(ReplaceInXml replaceInXml) {
-        this.replaceInXml = replaceInXml;
-    }
-
 }

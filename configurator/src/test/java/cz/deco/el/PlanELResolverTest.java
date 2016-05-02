@@ -32,7 +32,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -45,7 +44,7 @@ public class PlanELResolverTest {
     @Mock
     private ELReplacer replacer;
     @Mock
-    private Document document;
+    private Element document;
 
     boolean replaceInsertOrReplaceEntered;
     boolean replaceInObjectEntered;
@@ -115,7 +114,6 @@ public class PlanELResolverTest {
     public void testReplaceInObject() {
         PlanELResolver planELResolver = new PlanELResolver();
         planELResolver.replaceInObject(replacer, new Object());
-        Mockito.when(document.getDocumentElement()).thenReturn(Mockito.mock(Element.class));
         planELResolver.replaceInObject(replacer, document);
         Mockito.verify(replacer, Mockito.times(1)).replaceText((NodeList) Mockito.any());
     }

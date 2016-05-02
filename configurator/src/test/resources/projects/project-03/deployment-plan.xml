@@ -1,0 +1,54 @@
+<deployment-plan xmlns="http://javaee.deco.cz/deployment-plan"
+                 version="1.0"
+                 xmlns:ee="http://java.sun.com/xml/ns/javaee">
+    <application-name>application</application-name>
+    <variable-definitions>
+        <variable>
+            <name>libDirectory</name>
+            <value>lib</value>
+        </variable>
+    </variable-definitions>
+    <descriptor-override>
+        <path>/META-INF/application.xml</path>
+        <module-descriptor>
+            <replace type="content">
+                <xpath>/ee:application/ee:env-entry/ee:entry-name</xpath>
+                <value>xxx</value>
+            </replace>
+            <replace type="content">
+                <xpath>/ee:application/ee:env-entry[ee:entry-name/text()='xxx']/ee:entry-value</xpath>
+                <value>xvalue</value>
+            </replace>
+            <insert type="insertAsFirstChildOf">
+                <xpath>/ee:application</xpath>
+                <value>
+                    <ee:module>
+                        <ee:ejb>ejb</ee:ejb>
+                    </ee:module>
+                </value>
+            </insert>
+            <insert type="insertAfter">
+                <xpath>/ee:application/ee:module</xpath>
+                <value>
+                    <ee:module>
+                        <ee:ejb>ejb2</ee:ejb>
+                    </ee:module>
+                </value>
+            </insert>
+            <insert type="insertBefore">
+                <xpath>/ee:application/ee:module[ee:ejb/text()='ejb']</xpath>
+                <value>
+                    <ee:module>
+                        <ee:ejb>ejb0</ee:ejb>
+                    </ee:module>
+                </value>
+            </insert>
+            <insert type="insertAsLastChildOf">
+                <xpath>/ee:application</xpath>
+                <value>
+                    <ee:libDirectory>${libDirectory}</ee:libDirectory>
+                </value>
+            </insert>
+        </module-descriptor>
+    </descriptor-override>
+</deployment-plan>

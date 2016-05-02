@@ -26,7 +26,7 @@ import cz.deco.javaee.deployment_plan.Insert;
 import cz.deco.javaee.deployment_plan.ModuleDescriptor;
 import cz.deco.javaee.deployment_plan.Replace;
 import cz.deco.javaee.deployment_plan.VariableDefinitions;
-import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import java.util.List;
@@ -66,8 +66,8 @@ public class PlanELResolver {
     }
 
     protected void replaceInObject(ELReplacer replacer, Object value) {
-        if (value instanceof Document) {
-            NodeList childNodes = ((Document) value).getDocumentElement().getChildNodes();
+        if (value instanceof Element) {
+            NodeList childNodes = ((Element) value).getChildNodes();
             replacer.replaceText(childNodes);
         }
     }

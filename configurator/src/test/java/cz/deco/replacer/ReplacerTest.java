@@ -21,14 +21,21 @@ package cz.deco.replacer;
  */
 
 
+import cz.deco.javaee.deployment_plan.DescriptorOverride;
 import cz.deco.javaee.deployment_plan.Insert;
 import cz.deco.javaee.deployment_plan.InsertOperation;
+import cz.deco.javaee.deployment_plan.ModuleDescriptor;
 import cz.deco.javaee.deployment_plan.Replace;
 import cz.deco.javaee.deployment_plan.ReplaceOperation;
 import cz.deco.xml.XMLFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -37,20 +44,27 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import java.io.IOException;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ReplacerTest {
 
-    private Object detectInnerClass;
+    @Mock
+    private InsertIntoXml insertIntoXml;
+    @Mock
+    private ReplaceInXml replaceInXml;
+    @InjectMocks
     private Replacer replacer = new Replacer();
     private Element elementToInsert;
     private Replace replace = new Replace();
     private Insert insert = new Insert();
     private Document document;
+    private boolean applyReplaceEntered;
+    private boolean applyInsertEntered;
 
     @Before
     public void init() throws IOException, SAXException {
-        detectInnerClass = null;
+        applyReplaceEntered = false;
+        applyInsertEntered = false;
         document = loadDocument();
-
         elementToInsert = loadDocument().createElement("elementToInsert");
     }
 
@@ -68,15 +82,10 @@ public class ReplacerTest {
         insert.setXpath("/test");
         insert.setType(InsertOperation.INSERT_AS_FIRST_CHILD_OF);
         insert.setValue(elementToInsert);
-        replacer.setInsertIntoXml(new InsertIntoXml() {
-            @Override
-            protected void insertXml(Document document, Node intoNode, InsertOperation type, Node what) {
-                detectInnerClass = new Object();
-                Assert.assertSame(what, elementToInsert);
-            }
-        });
         replacer.apply(document, insert);
-        Assert.assertNotNull(detectInnerClass);
+        Mockito.verify(insertIntoXml,
+                Mockito.times(1)).insertXml(Mockito.same(document), (Node) Mockito.any(),
+                Mockito.same(InsertOperation.INSERT_AS_FIRST_CHILD_OF), (Node) Mockito.any());
     }
 
     @Test
@@ -84,15 +93,10 @@ public class ReplacerTest {
         replace.setXpath("/test");
         replace.setType(ReplaceOperation.CONTENT);
         replace.setValue(elementToInsert);
-        replacer.setReplaceInXml(new ReplaceInXml() {
-            @Override
-            protected void replaceXml(Document document, Node intoNode, ReplaceOperation type, Node what) {
-                detectInnerClass = new Object();
-                Assert.assertSame(what, elementToInsert);
-            }
-        });
         replacer.apply(document, replace);
-        Assert.assertNotNull(detectInnerClass);
+        Mockito.verify(replaceInXml,
+                Mockito.times(1)).replaceXml(Mockito.same(document), (Node) Mockito.any(),
+                Mockito.same(ReplaceOperation.CONTENT), (Node) Mockito.any());
     }
 
     @Test
@@ -100,14 +104,10 @@ public class ReplacerTest {
         replace.setXpath("/invalidXpath");
         replace.setType(ReplaceOperation.CONTENT);
         replace.setValue(elementToInsert);
-        replacer.setReplaceInXml(new ReplaceInXml() {
-            @Override
-            protected void replaceXml(Document document, Node intoNode, ReplaceOperation type, Node what) {
-                detectInnerClass = new Object();
-            }
-        });
         replacer.apply(document, replace);
-        Assert.assertNull(detectInnerClass);
+        Mockito.verify(replaceInXml,
+                Mockito.times(0)).replaceXml(Mockito.same(document), (Node) Mockito.any(),
+                Mockito.same(ReplaceOperation.CONTENT), (Node) Mockito.any());
     }
 
     @Test
@@ -115,14 +115,10 @@ public class ReplacerTest {
         replace.setXpath("/invalidXpath");
         replace.setType(ReplaceOperation.CONTENT);
         replace.setValue(null);
-        replacer.setReplaceInXml(new ReplaceInXml() {
-            @Override
-            protected void replaceXml(Document document, Node intoNode, ReplaceOperation type, Node what) {
-                detectInnerClass = new Object();
-            }
-        });
         replacer.apply(document, replace);
-        Assert.assertNull(detectInnerClass);
+        Mockito.verify(replaceInXml,
+                Mockito.times(0)).replaceXml(Mockito.same(document), (Node) Mockito.any(),
+                Mockito.same(ReplaceOperation.CONTENT), (Node) Mockito.any());
     }
 
     @Test
@@ -133,13 +129,32 @@ public class ReplacerTest {
         insert.setXpath("/w:web-app/w:env-entry");
         insert.setType(InsertOperation.INSERT_AS_FIRST_CHILD_OF);
         insert.setValue(elementToInsert);
-        replacer.setInsertIntoXml(new InsertIntoXml() {
-            @Override
-            protected void insertXml(Document document, Node intoNode, InsertOperation type, Node what) {
-                detectInnerClass = new Object();
-            }
-        });
         replacer.apply(localDocument, insert);
-        Assert.assertNotNull(detectInnerClass);
+        Mockito.verify(insertIntoXml,
+                Mockito.times(1)).insertXml(Mockito.same(localDocument), (Node) Mockito.any(),
+                Mockito.same(InsertOperation.INSERT_AS_FIRST_CHILD_OF), (Node) Mockito.any());
+    }
+
+    @Test
+    public void testApplyDescriptor() {
+        Replacer replacer = new Replacer() {
+            @Override
+            public void apply(Document document, Insert insert) {
+                applyInsertEntered = true;
+            }
+
+            @Override
+            public void apply(Document document, Replace replace) {
+                applyReplaceEntered = true;
+            }
+        };
+        DescriptorOverride descriptor = new DescriptorOverride();
+        ModuleDescriptor moduleDescriptor = new ModuleDescriptor();
+        moduleDescriptor.getInsertOrReplace().add(new Insert());
+        moduleDescriptor.getInsertOrReplace().add(new Replace());
+        descriptor.getModuleDescriptor().add(moduleDescriptor);
+        replacer.apply(document, descriptor);
+        Assert.assertTrue(applyInsertEntered);
+        Assert.assertTrue(applyReplaceEntered);
     }
 }

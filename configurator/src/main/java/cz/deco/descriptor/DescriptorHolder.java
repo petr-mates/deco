@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
@@ -69,6 +70,7 @@ public class DescriptorHolder {
 
     public void storeCurrent() {
         Transformer transformer = xmlFactory.getTransformerFactory();
+        transformer.setOutputProperty(OutputKeys.INDENT,"yes");
         try (FileWriter out = new FileWriter(getPath().toFile())) {
             StreamResult result = new StreamResult(out);
             DOMSource source = new DOMSource(getDocument());
