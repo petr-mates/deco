@@ -36,18 +36,16 @@ and we have a deployment-plan.xml
             <value>variable_value</value>
         </variable>
     </variable-definitions>
-    <module-override>
-        <module-name>application</module-name>
-        <module-type>war</module-type>
+    <descriptor-override>
+        <path>**/web.xml</path>
         <module-descriptor>
-            <uri>WEB-INF/web.xml</uri>
             <insert type="insertAsFirstChildOf">
-                <xpath>/web-app/</xpath>
-                <value>
-                    <env-enttry>
-                        <env-name>entry_name</env-name>
-                        <env-value>${variable_name}</env-value>
-                    </env-enttry>
+                <xpath>/e:web-app</xpath>
+                <value xmlns:e="http://java.sun.com/xml/ns/javaee">
+                    <e:env-enttry>
+                        <e:env-name>entry_name</e:env-name>
+                        <e:env-value>${variable_name}</e:env-value>
+                    </e:env-enttry>
                 </value>
             </insert>
         </module-descriptor>
