@@ -20,7 +20,6 @@ package cz.deco;
  * #L%
  */
 
-import cz.deco.core.DecoContext;
 import cz.deco.core.DecoContextImpl;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -33,6 +32,10 @@ import org.apache.commons.cli.ParseException;
 import java.io.File;
 
 public class Main {
+
+    private Main() {
+        super();
+    }
 
     public static void main(String[] args) {
         CommandLineParser parser = new DefaultParser();
