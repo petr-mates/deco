@@ -20,7 +20,7 @@ package cz.deco.zip;
  * #L%
  */
 
-import org.apache.commons.io.FileUtils;
+import cz.deco.path.PathUtils;
 import org.hamcrest.core.StringContains;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,7 +40,7 @@ public class UnpackApplicationTest {
     @Before
     public void init() throws IOException {
         targetDir = new File("target/test-data.zip/out/");
-        FileUtils.deleteDirectory(targetDir);
+        new PathUtils().deleteDirectory(targetDir.getAbsoluteFile().toPath());
         targetDir.mkdirs();
     }
 

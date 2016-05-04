@@ -20,7 +20,7 @@ package cz.deco.descriptor;
  * #L%
  */
 
-import org.apache.commons.io.FileUtils;
+import cz.deco.path.PathUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +34,7 @@ import org.w3c.dom.Document;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -54,13 +55,13 @@ public class DescriptorHolderTest {
     @Before
     public void init() {
         descriptorHolder = new DescriptorHolder();
-        File parentDirectory = pathToStore.getParent().toFile();
         try {
-            FileUtils.deleteDirectory(parentDirectory);
+            Path parent = pathToStore.getParent();
+            new PathUtils().deleteDirectory(parent);
+            Files.createDirectories(parent);
         } catch (IOException e) {
             LOG.error("error delete direcotry {}", pathToStore, e);
         }
-        parentDirectory.mkdirs();
     }
 
     @Test

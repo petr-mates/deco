@@ -21,7 +21,7 @@ package cz.deco;
  */
 
 import cz.deco.core.DecoContextImpl;
-import org.apache.commons.io.FileUtils;
+import cz.deco.path.PathUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -46,7 +46,7 @@ public class ApplicationIT {
 
     @BeforeClass
     public static void staticInit() throws IOException {
-        FileUtils.deleteDirectory(targetDir);
+        new PathUtils().deleteDirectory(targetDir.getAbsoluteFile().toPath());
         targetDir.mkdirs();
     }
 

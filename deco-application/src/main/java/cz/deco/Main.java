@@ -21,6 +21,8 @@ package cz.deco;
  */
 
 import cz.deco.core.DecoContextImpl;
+import cz.deco.core.DecoException;
+import cz.deco.path.PathUtils;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -30,6 +32,9 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Main {
 
@@ -57,9 +62,18 @@ public class Main {
 
         context.setOutputArchive(new File(target).getAbsoluteFile().toPath());
         context.setApplicationArchive(new File(source).getAbsoluteFile().toPath());
-        context.setTemporaryDir(new File(temp).getAbsoluteFile().toPath());
+        Path temporaryDir;
+        if (cmd.hasOption("d")) {
+            temporaryDir = new File(temp).getAbsoluteFile().toPath();
+        } else {
+            temporaryDir = getTempDirectory();
+        }
+        context.setTemporaryDir(temporaryDir);
         context.setDeploymentPlan(new File(plan).getAbsoluteFile().toPath());
+
         new Application().doWork(context);
+
+        cleanUp(temporaryDir);
 
     }
 
@@ -94,5 +108,21 @@ public class Main {
         options.addOption(target);
         options.addOption(temp);
         return options;
+    }
+
+    protected static Path getTempDirectory() {
+        try {
+            return Files.createTempDirectory("deco");
+        } catch (IOException e) {
+            throw new DecoException("error creating temp directory", e);
+        }
+    }
+
+    protected static void cleanUp(Path tmpDir) {
+        try {
+            new PathUtils().deleteDirectory(tmpDir);
+        } catch (IOException e) {
+            throw new DecoException("error delete temp directory", e);
+        }
     }
 }

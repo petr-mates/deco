@@ -64,7 +64,6 @@
         <version.slf4j-simple>1.7.21</version.slf4j-simple>
         <version.javax-el>2.2.6</version.javax-el>
         <version.mockito>1.10.19</version.mockito>
-        <version.commons-io>2.5</version.commons-io>
         <version.commons-cli>1.3.1</version.commons-cli>
         <version.maven-plugin-api>3.0</version.maven-plugin-api>
         <version.maven-plugin-annotations>3.4</version.maven-plugin-annotations>
@@ -106,11 +105,6 @@
                         <artifactId>hamcrest</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${version.commons-io}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
