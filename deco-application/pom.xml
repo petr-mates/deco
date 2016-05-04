@@ -4,7 +4,7 @@
     <parent>
         <artifactId>deco-parent</artifactId>
         <groupId>cz.deco.javaee.depl</groupId>
-        <version>0.0.1</version>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
     <artifactId>deco-application</artifactId>
     <dependencies>
