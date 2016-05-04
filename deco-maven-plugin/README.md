@@ -1,6 +1,6 @@
 # Deco maven plugin
 
-You can use deco maven plugin to configure your application.
+You can use deco maven plugin to configured your application.
 deco-maven-plugin is configure to run in verify phase.
 
 maven configuration for deco plugin.
