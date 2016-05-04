@@ -57,3 +57,6 @@ should be changed and entry_name should be in web.xml with "variable_value".
 
 ## Deco maven plugin
 [deco-maven-plugin](deco-maven-plugin/README.md)
+
+## Deco command line application
+[deco application](deco-application/README.md)
