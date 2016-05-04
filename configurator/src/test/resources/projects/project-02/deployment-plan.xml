@@ -1,0 +1,18 @@
+<deployment-plan xmlns="http://javaee.deco.cz/deployment-plan"
+                 version="1.0">
+    <application-name>application</application-name>
+    <descriptor-override>
+        <path>/META-INF/application.xml</path>
+        <module-descriptor>
+            <insert type="insertAsLastChildOf">
+                <xpath>/ee:application</xpath>
+                <value xmlns:ee="http://java.sun.com/xml/ns/javaee">
+                    <env-entry xmlns="http://java.sun.com/xml/ns/javaee">
+                        <entry-name>name</entry-name>
+                        <entry-value>value</entry-value>
+                    </env-entry>
+                </value>
+            </insert>
+        </module-descriptor>
+    </descriptor-override>
+</deployment-plan>

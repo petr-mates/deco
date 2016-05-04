@@ -1,0 +1,22 @@
+<deployment-plan xmlns="http://javaee.deco.cz/deployment-plan"
+                 version="1.0"
+                 xmlns:ee="http://java.sun.com/xml/ns/javaee">
+    <application-name>application</application-name>
+    <variable-definitions>
+        <variable>
+            <name>libDirectory</name>
+            <value>lib</value>
+        </variable>
+    </variable-definitions>
+    <descriptor-override>
+        <path>/ejb.jar/META-INF/ejb-jar.xml</path>
+        <module-descriptor>
+            <insert type="insertAsLastChildOf">
+                <xpath>/ee:ejb-jar</xpath>
+                <value>
+                    <ee:libDirectory>${libDirectory}</ee:libDirectory>
+                </value>
+            </insert>
+        </module-descriptor>
+    </descriptor-override>
+</deployment-plan>

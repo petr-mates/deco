@@ -1,5 +1,4 @@
-<deployment-plan xmlns="http://javaee.deco.cz/deployment-plan" version="1.0">
-    <application-name>string</application-name>
+<deployment-plan xmlns="http://javaee.deco.cz/deployment-plan">
     <variable-definitions>
         <variable>
             <description>description</description>
@@ -8,20 +7,19 @@
         </variable>
     </variable-definitions>
     <descriptor-override>
-        <path></path>
+        <path>anyWebApplication</path>
     </descriptor-override>
     <descriptor-override>
-        <path>**/*.java</path>
+        <path>anyResourceAdapter</path>
         <module-descriptor>
+            <uri></uri>
             <insert type="insertAfter">
                 <xpath></xpath>
-                <value>${value}</value>
+                <value></value>
             </insert>
             <replace type="content">
                 <xpath></xpath>
-                <value>
-                    <xmlValue/>
-                </value>
+                <value></value>
             </replace>
         </module-descriptor>
     </descriptor-override>

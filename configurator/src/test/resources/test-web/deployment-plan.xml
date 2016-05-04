@@ -1,0 +1,26 @@
+<deployment-plan xmlns="http://javaee.deco.cz/deployment-plan"
+                 xmlns:w="http://java.sun.com/xml/ns/javaee"
+                 version="1.0">
+    <application-name>test-web</application-name>
+    <variable-definitions>
+        <variable>
+            <description>value to change</description>
+            <name>variable_name</name>
+            <value>variable_value</value>
+        </variable>
+    </variable-definitions>
+    <descriptor-override>
+        <path>anyResourceAdapter</path>
+        <module-descriptor>
+            <insert type="insertAsFirstChildOf">
+                <xpath>/w:web-app</xpath>
+                <value>
+                    <env-entry xmlns="http://java.sun.com/xml/ns/javaeeo">
+                        <entry-name>name</entry-name>
+                        <entry-type>java.lang.String</entry-type>
+                    </env-entry>
+                </value>
+            </insert>
+        </module-descriptor>
+    </descriptor-override>
+</deployment-plan>

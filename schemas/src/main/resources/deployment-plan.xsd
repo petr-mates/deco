@@ -1,15 +1,16 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0"
-            xmlns:tns="http://cz.mates.deployment/plan"
-            targetNamespace="http://cz.mates.deployment/plan" attributeFormDefault="unqualified"
+            xmlns:tns="http://javaee.deco.cz/deployment-plan"
+            targetNamespace="http://javaee.deco.cz/deployment-plan" attributeFormDefault="unqualified"
             elementFormDefault="qualified">
-    <xsd:element name="deployment-plan" type="tns:Deployment-Plan">
+
+    <xsd:element name="deployment-plan">
         <xsd:annotation>
             <xsd:documentation>deployment element root element.
 
                 deployment plan example:
                 <![CDATA[
 
-                <deployment-plan xmlns="http://cz.mates.deployment/plan">
+                <deployment-plan xmlns="http://cz.deco.deployment/plan">
                     ...
                     ...
                 </deployment-plan>
@@ -17,24 +18,30 @@
                 ]]>
             </xsd:documentation>
         </xsd:annotation>
-    </xsd:element>
 
-    <xsd:complexType name="Deployment-Plan">
-        <xsd:annotation>
-            <xsd:documentation>
-                deployment plan root element complex type
-            </xsd:documentation>
-        </xsd:annotation>
-        <xsd:sequence>
-            <xsd:element name="application-name" type="xsd:string">
-                <xsd:annotation>
-                    <xsd:documentation>deployment plan name</xsd:documentation>
-                </xsd:annotation>
-            </xsd:element>
-            <xsd:element name="variable-definitions" type="tns:Variable-Definitions" minOccurs="0"/>
-            <xsd:element name="module-override" type="tns:Module-Override" minOccurs="0" maxOccurs="unbounded"/>
-        </xsd:sequence>
-    </xsd:complexType>
+        <xsd:complexType>
+            <xsd:annotation>
+                <xsd:documentation>
+                    deployment plan root element complex type
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:sequence>
+                <xsd:element name="application-name" type="xsd:string">
+                    <xsd:annotation>
+                        <xsd:documentation>deployment plan name</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:element>
+                <xsd:element name="variable-definitions" type="tns:Variable-Definitions" minOccurs="0"/>
+                <xsd:element name="descriptor-override" type="tns:Descriptor-Override" minOccurs="0"
+                             maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="version"
+                           type="xsd:decimal"
+                           fixed="1.0"
+                           use="optional">
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
 
     <xsd:complexType name="Variable-Definitions">
         <xsd:sequence>
@@ -49,17 +56,16 @@
         </xsd:sequence>
     </xsd:complexType>
 
-    <xsd:complexType name="Module-Override">
+    <xsd:complexType name="Descriptor-Override">
         <xsd:sequence>
-            <xsd:element name="module-name" type="xsd:string"/>
-            <xsd:element name="module-type" type="xsd:string"/>
+            <xsd:group ref="tns:Description"/>
+            <xsd:element name="path" type="xsd:anyURI"/>
             <xsd:element name="module-descriptor" type="tns:Module-Descriptor" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="Module-Descriptor">
         <xsd:sequence>
-            <xsd:element name="uri" type="xsd:anyURI"/>
             <xsd:choice maxOccurs="unbounded">
                 <xsd:element name="insert" type="tns:Insert"/>
                 <xsd:element name="replace" type="tns:Replace"/>
@@ -71,7 +77,7 @@
         <xsd:sequence>
             <xsd:group ref="tns:Description"/>
             <xsd:element name="xpath" type="xsd:string"/>
-            <xsd:element name="value" type="xsd:anyType" minOccurs="0"/>
+            <xsd:group ref="tns:Value"/>
         </xsd:sequence>
         <xsd:attribute name="type" type="tns:InsertOperation" use="required"/>
     </xsd:complexType>
@@ -80,7 +86,7 @@
         <xsd:sequence>
             <xsd:group ref="tns:Description"/>
             <xsd:element name="xpath" type="xsd:string"/>
-            <xsd:element name="value" type="xsd:anyType" minOccurs="0"/>
+            <xsd:group ref="tns:Value"/>
         </xsd:sequence>
         <xsd:attribute name="type" type="tns:ReplaceOperation" use="required"/>
     </xsd:complexType>
@@ -90,6 +96,12 @@
         <xsd:sequence>
             <xsd:element name="description" type="xsd:string" minOccurs="0"/>
         </xsd:sequence>
+    </xsd:group>
+
+    <xsd:group name="Value">
+        <xsd:choice>
+            <xsd:element name="value" type="xsd:anyType"/>
+        </xsd:choice>
     </xsd:group>
 
     <xsd:simpleType name="VariableName">
