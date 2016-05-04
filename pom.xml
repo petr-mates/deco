@@ -73,8 +73,8 @@
     </properties>
 
     <scm>
-        <developerConnection>https://github.com/petr-mates/deployment-plan.git</developerConnection>
-        <connection>https://github.com/petr-mates/deployment-plan.git</connection>
+        <developerConnection>scm:git:https://github.com/petr-mates/deployment-plan.git</developerConnection>
+        <connection>scm:git:https://github.com/petr-mates/deployment-plan.git</connection>
         <url>https://github.com/petr-mates/deployment-plan.git</url>
     </scm>
 
