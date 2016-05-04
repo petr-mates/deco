@@ -35,13 +35,18 @@ import cz.deco.zip.PackApplication;
 import cz.deco.zip.UnpackApplication;
 import cz.deco.zip.ZipDirectoryMapper;
 import cz.deco.zip.ZipUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
 public class Application {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
     private DeploymentPlanLoader planLoader = new DeploymentPlanLoader();
     private UnpackApplication unpack = new UnpackApplication();
@@ -54,9 +59,12 @@ public class Application {
         Path tempDir = context.getTemporaryDir();
         Path outputArchive = context.getOutputArchive();
         checkArchive(applicationArchive);
-        DeploymentPlan plan = planLoader.load(new DeploymentPlanFile(context.getDeploymentPlan().toUri()));
+        URI planUri = context.getDeploymentPlan().toUri();
+        LOG.info("loading deployment plan {}", planUri);
+        DeploymentPlan plan = planLoader.load(new DeploymentPlanFile(planUri));
         planELResolver.resolveAllExpressions(plan);
 
+        LOG.info("unpack archive {}", applicationArchive);
         ZipDirectoryMapper mapper = unpack(applicationArchive, tempDir);
         DecoPathMatcher pathMatcher = new DecoPathMatcher(mapper);
 
@@ -77,6 +85,7 @@ public class Application {
 
     protected void packApplicationArchive(Path tempDir, Path outputZip, PackApplication pack) {
         try {
+            LOG.info("pack archive {}", outputZip);
             pack.createZip(tempDir, outputZip);
         } catch (IOException e) {
             throw new DecoException("pack application archive error", e);

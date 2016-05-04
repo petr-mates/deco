@@ -24,35 +24,47 @@ import cz.deco.core.DecoContextImpl;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 
 @Mojo(name = "configure", defaultPhase = LifecyclePhase.VERIFY)
 public class ConfigureMojo extends AbstractMojo {
 
-    @Parameter(property = "deco.source", required = true)
+    @Parameter(property = "deco.source", required = false)
     private File sourceFile;
 
-    @Parameter(property = "deco.target", required = true)
+    @Parameter(property = "deco.target", required = false,
+            defaultValue = "${project.build.directory}/${project.build.finalName}-deco.${project.packaging}")
     private File targetFile;
 
     @Parameter(property = "deco.plan", required = true)
     private File deploymentPlan;
 
     @Parameter(property = "deco.temp", required = true,
-            defaultValue = "${project.build.outputDirectory}/deco/tmp")
+            defaultValue = "${project.build.directory}/deco/tmp")
     private File tempDir;
+
+    @Component
+    private MavenProject project;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+
+        if (sourceFile == null) {
+            sourceFile = project.getArtifact().getFile();
+        }
+
         DecoContextImpl decoContext = new DecoContextImpl();
         decoContext.setDeploymentPlan(deploymentPlan.getAbsoluteFile().toPath());
         decoContext.setApplicationArchive(sourceFile.getAbsoluteFile().toPath());
         decoContext.setTemporaryDir(tempDir.getAbsoluteFile().toPath());
         decoContext.setOutputArchive(targetFile.getAbsoluteFile().toPath());
         new Application().doWork(decoContext);
+
     }
 }
