@@ -55,3 +55,6 @@ and we have a deployment-plan.xml
 
 After run DECO web.xml in application.war/WEB-INF
 should be changed and entry_name should be in web.xml with "variable_value".
+
+## Deco maven plugin
+[deco-maven-plugin](deco-maven-plugin/README.md)
