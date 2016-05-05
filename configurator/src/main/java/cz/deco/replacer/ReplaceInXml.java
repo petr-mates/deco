@@ -44,17 +44,16 @@ public class ReplaceInXml {
     protected void replaceXml(Node where, ReplaceOperation type, Node what) {
         Element xml = (Element) what;
         NodeList nodeList = xml.getChildNodes();
-        Node firstChild = null;
         if (nodeList.getLength() > 0) {
-            replaceNodes(where, type, nodeList, firstChild);
+            replaceNodes(where, type, nodeList);
         } else {
             replaceNode(where, type, null);
         }
     }
 
-    protected void replaceNodes(Node where, ReplaceOperation type,
-                                NodeList nodeList, Node firstChild) {
+    protected void replaceNodes(Node where, ReplaceOperation type, NodeList nodeList) {
         Document document = where.getOwnerDocument();
+        Node firstChild = null;
         for (int j = 0; j < nodeList.getLength(); j++) {
             if (j == 0) {
                 firstChild = nodeList.item(j);

@@ -69,7 +69,8 @@ public class DeploymentPlanLoader {
     }
 
     /**
-     * do schema validation.
+     * do schema validation. Validation could be done in unmarhalling deployment file,
+     * but I prefer to validate it manualy
      *
      * @param plan
      */

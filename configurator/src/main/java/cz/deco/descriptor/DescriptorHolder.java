@@ -55,6 +55,12 @@ public class DescriptorHolder {
         return descriptor.getPath();
     }
 
+    /**
+     * load descriptor to DOM source.
+     *
+     * @param path
+     * @return
+     */
     public boolean load(Path path) {
         try {
             Document loadedDocument = xmlFactory.getBuilderNs().parse(path.toFile());
@@ -68,9 +74,12 @@ public class DescriptorHolder {
         return false;
     }
 
+    /**
+     * store document back to source file.
+     */
     public void storeCurrent() {
         Transformer transformer = xmlFactory.getTransformerFactory();
-        transformer.setOutputProperty(OutputKeys.INDENT,"yes");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         try (FileWriter out = new FileWriter(getPath().toFile())) {
             StreamResult result = new StreamResult(out);
             DOMSource source = new DOMSource(getDocument());
