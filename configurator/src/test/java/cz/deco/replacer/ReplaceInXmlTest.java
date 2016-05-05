@@ -71,7 +71,7 @@ public class ReplaceInXmlTest {
 
     @Test
     public void replaceContent() throws Exception {
-        replacer.replaceXml(document, getNodeByName("node1"), ReplaceOperation.CONTENT, newNode);
+        replacer.replaceXml(getNodeByName("node1"), ReplaceOperation.CONTENT, newNode);
         Assert.assertNotNull(evalXpath("/test/node1/nodeToInsert"));
         Assert.assertNull(evalXpath("/test/node1/node2"));
         Assert.assertNotNull(evalXpath("//nodeToInsert/following-sibling::nodeToInsert2"));
@@ -79,7 +79,7 @@ public class ReplaceInXmlTest {
 
     @Test
     public void replaceEntireNode() throws Exception {
-        replacer.replaceXml(document, getNodeByName("node1"), ReplaceOperation.ENTIRE_NODE, newNode);
+        replacer.replaceXml( getNodeByName("node1"), ReplaceOperation.ENTIRE_NODE, newNode);
         Assert.assertNotNull(evalXpath("/test/nodeToInsert"));
         Assert.assertNull(evalXpath("/test/node1"));
         Assert.assertNotNull(evalXpath("//nodeToInsert/following-sibling::nodeToInsert2"));
@@ -88,7 +88,7 @@ public class ReplaceInXmlTest {
     @Test
     public void replaceContentDelete() throws Exception {
         Element emptyNode = document.createElement("xml");
-        replacer.replaceXml(document, getNodeByName("node1"), ReplaceOperation.CONTENT, emptyNode);
+        replacer.replaceXml(getNodeByName("node1"), ReplaceOperation.CONTENT, emptyNode);
         Assert.assertNotNull(evalXpath("/test/node1"));
         Assert.assertNull(evalXpath("/test/node1/node2"));
     }

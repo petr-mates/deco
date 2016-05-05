@@ -78,25 +78,25 @@ public class InsertIntoXmlTest {
 
     @Test
     public void applyDomAfter() throws Exception {
-        inserter.insertXml(document, getNodeByName("node2"), InsertOperation.INSERT_AFTER, parse);
+        inserter.insertXml(getNodeByName("node2"), InsertOperation.INSERT_AFTER, parse);
         Assert.assertNotNull(evalXpath("/test/node1/node2/following-sibling::nodeToInsert"));
     }
 
     @Test
     public void applyDomAsFirstChild() throws Exception {
-        inserter.insertXml(document, getNodeByName("node1"), InsertOperation.INSERT_AS_FIRST_CHILD_OF, parse);
+        inserter.insertXml(getNodeByName("node1"), InsertOperation.INSERT_AS_FIRST_CHILD_OF, parse);
         Assert.assertNotNull(evalXpath("/test/node1/nodeToInsert/following-sibling::node2"));
     }
 
     @Test
     public void applyDomAsLastChild() throws Exception {
-        inserter.insertXml(document, getNodeByName("node1"), InsertOperation.INSERT_AS_LAST_CHILD_OF, parse);
+        inserter.insertXml(getNodeByName("node1"), InsertOperation.INSERT_AS_LAST_CHILD_OF, parse);
         Assert.assertNotNull(evalXpath("/test/node1/node2/following-sibling::nodeToInsert"));
     }
 
     @Test
     public void applyDomBefore() throws Exception {
-        inserter.insertXml(document, getNodeByName("node2"), InsertOperation.INSERT_BEFORE, parse);
+        inserter.insertXml(getNodeByName("node2"), InsertOperation.INSERT_BEFORE, parse);
         Assert.assertNotNull(evalXpath("/test/node1/nodeToInsert2/following-sibling::node2"));
     }
 }

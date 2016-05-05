@@ -84,7 +84,7 @@ public class ReplacerTest {
         insert.setValue(elementToInsert);
         replacer.apply(document, insert);
         Mockito.verify(insertIntoXml,
-                Mockito.times(1)).insertXml(Mockito.same(document), (Node) Mockito.any(),
+                Mockito.times(1)).insertXml((Node) Mockito.any(),
                 Mockito.same(InsertOperation.INSERT_AS_FIRST_CHILD_OF), (Node) Mockito.any());
     }
 
@@ -95,7 +95,7 @@ public class ReplacerTest {
         replace.setValue(elementToInsert);
         replacer.apply(document, replace);
         Mockito.verify(replaceInXml,
-                Mockito.times(1)).replaceXml(Mockito.same(document), (Node) Mockito.any(),
+                Mockito.times(1)).replaceXml((Node) Mockito.any(),
                 Mockito.same(ReplaceOperation.CONTENT), (Node) Mockito.any());
     }
 
@@ -106,7 +106,7 @@ public class ReplacerTest {
         replace.setValue(elementToInsert);
         replacer.apply(document, replace);
         Mockito.verify(replaceInXml,
-                Mockito.times(0)).replaceXml(Mockito.same(document), (Node) Mockito.any(),
+                Mockito.times(0)).replaceXml((Node) Mockito.any(),
                 Mockito.same(ReplaceOperation.CONTENT), (Node) Mockito.any());
     }
 
@@ -117,7 +117,7 @@ public class ReplacerTest {
         replace.setValue(null);
         replacer.apply(document, replace);
         Mockito.verify(replaceInXml,
-                Mockito.times(0)).replaceXml(Mockito.same(document), (Node) Mockito.any(),
+                Mockito.times(0)).replaceXml((Node) Mockito.any(),
                 Mockito.same(ReplaceOperation.CONTENT), (Node) Mockito.any());
     }
 
@@ -131,7 +131,7 @@ public class ReplacerTest {
         insert.setValue(elementToInsert);
         replacer.apply(localDocument, insert);
         Mockito.verify(insertIntoXml,
-                Mockito.times(1)).insertXml(Mockito.same(localDocument), (Node) Mockito.any(),
+                Mockito.times(1)).insertXml((Node) Mockito.any(),
                 Mockito.same(InsertOperation.INSERT_AS_FIRST_CHILD_OF), (Node) Mockito.any());
     }
 

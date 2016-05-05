@@ -71,7 +71,7 @@ public class Replacer {
         for (int i = 0; i < length; i++) {
             Node item = list.item(i);
             if (insert.getValue() != null) {
-                insertIntoXml.insertXml(document, item, insert.getType(), (Node) insert.getValue());
+                insertIntoXml.insertXml(item, insert.getType(), (Node) insert.getValue());
             }
         }
     }
@@ -87,7 +87,7 @@ public class Replacer {
         for (int i = 0; i < length; i++) {
             Node item = list.item(i);
             if (replace.getValue() != null) {
-                replaceInXml.replaceXml(document, item, replace.getType(), (Node) replace.getValue());
+                replaceInXml.replaceXml(item, replace.getType(), (Node) replace.getValue());
             }
         }
     }

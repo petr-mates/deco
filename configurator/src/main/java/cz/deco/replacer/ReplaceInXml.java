@@ -41,18 +41,20 @@ public class ReplaceInXml {
 
     private InsertIntoXml insertIntoXml = new InsertIntoXml();
 
-    protected void replaceXml(Document document, Node where, ReplaceOperation type, Node what) {
+    protected void replaceXml(Node where, ReplaceOperation type, Node what) {
         Element xml = (Element) what;
         NodeList nodeList = xml.getChildNodes();
         Node firstChild = null;
         if (nodeList.getLength() > 0) {
-            replaceNodes(document, where, type, nodeList, firstChild);
+            replaceNodes(where, type, nodeList, firstChild);
         } else {
             replaceNode(where, type, null);
         }
     }
 
-    private void replaceNodes(Document document, Node where, ReplaceOperation type, NodeList nodeList, Node firstChild) {
+    protected void replaceNodes(Node where, ReplaceOperation type,
+                                NodeList nodeList, Node firstChild) {
+        Document document = where.getOwnerDocument();
         for (int j = 0; j < nodeList.getLength(); j++) {
             if (j == 0) {
                 firstChild = nodeList.item(j);
@@ -68,36 +70,55 @@ public class ReplaceInXml {
         }
     }
 
-    protected void replaceNode(Node where, ReplaceOperation type, Node nodeToInsert) {
-        LOG.debug("node: {} type: {} nodeToInsert {}", where, type, nodeToInsert);
+    /**
+     * replace node.
+     *
+     * @param where   node where operation will be done
+     * @param type    type of operation.
+     * @param newNode node to be inserted.
+     */
+    protected void replaceNode(Node where, ReplaceOperation type, Node newNode) {
+        LOG.debug("node: {} type: {} newNode {}", where, type, newNode);
         switch (type) {
             case CONTENT:
-                replaceNodeContent(where, nodeToInsert);
+                replaceNodeContent(where, newNode);
                 break;
             case ENTIRE_NODE:
-                replaceEntireNode(where, nodeToInsert);
+                replaceEntireNode(where, newNode);
                 break;
             default:
                 break;
         }
     }
 
-    protected void replaceEntireNode(Node where, Node nodeToInsert) {
-        if (nodeToInsert == null) {
+    /**
+     * replace entire node. if newNode is null, entire node will be deleted.
+     *
+     * @param where
+     * @param newNode
+     */
+    protected void replaceEntireNode(Node where, Node newNode) {
+        if (newNode == null) {
             where.getParentNode().removeChild(where);
         } else {
-            where.getParentNode().replaceChild(nodeToInsert, where);
+            where.getParentNode().replaceChild(newNode, where);
         }
     }
 
-    protected void replaceNodeContent(Node where, Node nodeToInsert) {
+    /**
+     * Replace node context in where node. if newNode is null, node content will be deleted.
+     *
+     * @param where
+     * @param newNode
+     */
+    protected void replaceNodeContent(Node where, Node newNode) {
         NodeList childNodes = where.getChildNodes();
         int length = childNodes.getLength();
         for (int i = length - 1; i > -1; i--) {
             where.removeChild(childNodes.item(i));
         }
-        if (nodeToInsert != null) {
-            where.appendChild(nodeToInsert);
+        if (newNode != null) {
+            where.appendChild(newNode);
         }
     }
 }

@@ -40,10 +40,10 @@ import org.w3c.dom.NodeList;
 public class InsertIntoXml {
     private static final Logger LOG = LoggerFactory.getLogger(InsertIntoXml.class);
 
-    protected void insertXml(Document document, Node intoNode, InsertOperation type, Node what) {
+    protected void insertXml(Node intoNode, InsertOperation type, Node what) {
         Element xml = (Element) what;
         NodeList nodeList = xml.getChildNodes();
-
+        Document document = intoNode.getOwnerDocument();
         Node firstChild = null;
         for (int i = 0; i < nodeList.getLength(); i++) {
             if (i == 0) {
