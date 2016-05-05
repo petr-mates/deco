@@ -19,4 +19,17 @@
             </insert>
         </module-descriptor>
     </descriptor-override>
+    <descriptor-override>
+        <path>/META-INF/application.xml</path>
+        <module-descriptor>
+            <replace type="content">
+                <xpath>/ee:application</xpath>
+                <value/>
+            </replace>
+            <insert type="insertAsFirstChildOf">
+                <xpath>/ee:application</xpath>
+                <value/>
+            </insert>
+        </module-descriptor>
+    </descriptor-override>
 </deployment-plan>

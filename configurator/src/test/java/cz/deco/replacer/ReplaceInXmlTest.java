@@ -22,11 +22,11 @@ package cz.deco.replacer;
 
 import cz.deco.javaee.deployment_plan.ReplaceOperation;
 import cz.deco.xml.XMLFactory;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -60,34 +60,58 @@ public class ReplaceInXmlTest {
     }
 
     private ReplaceInXml replacer = new ReplaceInXml();
-    private Node parse;
+    private Node newNode;
     private Document document;
 
     @Before
     public void init() throws Exception {
-        ReplaceInXml replacer = new ReplaceInXml();
-        parse = getNodeToPlace();
+        newNode = getNodeToPlace();
         document = loadDocument();
-    }
-
-    @After
-    public void destroy() throws XPathExpressionException {
-        Assert.assertNotNull(evalXpath("//nodeToInsert/following-sibling::nodeToInsert2"));
-        //XMLTestSupport.printXml(document);
     }
 
     @Test
     public void replaceContent() throws Exception {
-        replacer.replaceXml(document, getNodeByName("node1"), ReplaceOperation.CONTENT, parse);
+        replacer.replaceXml(getNodeByName("node1"), ReplaceOperation.CONTENT, newNode);
         Assert.assertNotNull(evalXpath("/test/node1/nodeToInsert"));
         Assert.assertNull(evalXpath("/test/node1/node2"));
+        Assert.assertNotNull(evalXpath("//nodeToInsert/following-sibling::nodeToInsert2"));
     }
 
     @Test
     public void replaceEntireNode() throws Exception {
-        replacer.replaceXml(document, getNodeByName("node1"), ReplaceOperation.ENTIRE_NODE, parse);
+        replacer.replaceXml( getNodeByName("node1"), ReplaceOperation.ENTIRE_NODE, newNode);
         Assert.assertNotNull(evalXpath("/test/nodeToInsert"));
         Assert.assertNull(evalXpath("/test/node1"));
+        Assert.assertNotNull(evalXpath("//nodeToInsert/following-sibling::nodeToInsert2"));
     }
 
+    @Test
+    public void replaceContentDelete() throws Exception {
+        Element emptyNode = document.createElement("xml");
+        replacer.replaceXml(getNodeByName("node1"), ReplaceOperation.CONTENT, emptyNode);
+        Assert.assertNotNull(evalXpath("/test/node1"));
+        Assert.assertNull(evalXpath("/test/node1/node2"));
+    }
+
+    @Test
+    public void replaceEntireNodeDelte() throws Exception {
+        Element emptyNode = document.createElement("xml");
+        emptyNode.appendChild(document.createElement("nodeToDelete"));
+        document.getDocumentElement().appendChild(emptyNode);
+        Assert.assertNotNull(evalXpath("/test/xml/nodeToDelete"));
+        replacer.replaceEntireNode(emptyNode.getFirstChild(), null);
+        Assert.assertNotNull(evalXpath("/test/xml"));
+        Assert.assertNull(evalXpath("/test/xml/nodeToDelete"));
+    }
+
+    @Test
+    public void replaceNodeContentDelete() throws Exception {
+        Element emptyNode = document.createElement("xml");
+        emptyNode.appendChild(document.createElement("nodeToDelete"));
+        document.getDocumentElement().appendChild(emptyNode);
+        Assert.assertNotNull(evalXpath("/test/xml/nodeToDelete"));
+        replacer.replaceNodeContent(emptyNode, null);
+        Assert.assertNotNull(evalXpath("/test/xml"));
+        Assert.assertNull(evalXpath("/test/xml/nodeToDelete"));
+    }
 }

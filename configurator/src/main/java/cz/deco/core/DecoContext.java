@@ -22,12 +22,35 @@ package cz.deco.core;
 
 import java.nio.file.Path;
 
+/**
+ * deco context holds application data from start application.
+ */
 public interface DecoContext {
+    /**
+     * Path to application archive.
+     *
+     * @return
+     */
     Path getApplicationArchive();
 
+    /**
+     * Path to deployment plan.
+     *
+     * @return
+     */
     Path getDeploymentPlan();
 
+    /**
+     * temporary directory.
+     *
+     * @return
+     */
     Path getTemporaryDir();
 
+    /**
+     * Path to target application archive.
+     *
+     * @return
+     */
     Path getOutputArchive();
 }

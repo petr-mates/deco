@@ -22,11 +22,18 @@ package cz.deco;
 
 import cz.deco.core.DecoContextImpl;
 import cz.deco.path.PathUtils;
+import cz.deco.xml.XMLFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.w3c.dom.Document;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -43,6 +50,19 @@ public class ApplicationIT {
     private static File targetDir = new File("target/it/");
 
     private ZipTester zipTester = new ZipTester();
+    private DocumentBuilder builderNs;
+    private XPath xpath = XMLFactory.newInstance().getXPathFactory().newXPath();
+
+    {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        documentBuilderFactory.setNamespaceAware(false);
+
+        try {
+            builderNs = documentBuilderFactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @BeforeClass
     public static void staticInit() throws IOException {
@@ -88,6 +108,11 @@ public class ApplicationIT {
         Assert.assertTrue(out.contains("/META-INF/application.xml"));
         Assert.assertTrue(out.contains("/META-INF/MANIFEST.MF"));
         Assert.assertEquals(2, out.size());
+        String absolutePath = new File(targetDir, "project-02/tmp/META-INF/application.xml").getAbsolutePath();
+        test(absolutePath,
+                "/application/env-entry/entry-name/text()", "name");
+        test(absolutePath,
+                "/application/env-entry/entry-value/text()", "value");
     }
 
     @Test
@@ -98,6 +123,19 @@ public class ApplicationIT {
         Assert.assertTrue(out.contains("/META-INF/application.xml"));
         Assert.assertTrue(out.contains("/META-INF/MANIFEST.MF"));
         Assert.assertEquals(2, out.size());
+        String absolutePath = new File(targetDir, "project-03/tmp/META-INF/application.xml").getAbsolutePath();
+        test(absolutePath,
+                "/application/libDirectory/text()", "lib");
+        test(absolutePath,
+                "/application/module[1]//ejb/text()", "ejb0");
+        test(absolutePath,
+                "/application/module[2]//ejb/text()", "ejb");
+        test(absolutePath,
+                "/application/module[3]//ejb/text()", "ejb2");
+        test(absolutePath,
+                "/application/env-entry/entry-name/text()", "xxx");
+        test(absolutePath,
+                "/application/env-entry/entry-value/text()", "xvalue");
     }
 
     @Test
@@ -109,5 +147,15 @@ public class ApplicationIT {
         Assert.assertTrue(out.contains("/META-INF/MANIFEST.MF"));
         Assert.assertTrue(out.contains("/ejb.jar"));
         Assert.assertEquals(3, out.size());
+    }
+
+    protected void test(String source, String xpathExpression, String value) {
+        try {
+            Document parse = builderNs.parse(new File(source));
+            Assert.assertEquals(value, xpath.evaluate(xpathExpression,
+                    parse.getDocumentElement(), XPathConstants.STRING));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

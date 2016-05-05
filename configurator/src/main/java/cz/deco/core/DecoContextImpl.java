@@ -32,6 +32,9 @@ public class DecoContextImpl implements DecoContext {
 
     private Path deploymentPlan;
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public Path getApplicationArchive() {
         return applicationArchive;
@@ -41,6 +44,9 @@ public class DecoContextImpl implements DecoContext {
         this.applicationArchive = applicationArchive;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public Path getDeploymentPlan() {
         return deploymentPlan;
@@ -50,6 +56,9 @@ public class DecoContextImpl implements DecoContext {
         this.deploymentPlan = deploymentPlan;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public Path getTemporaryDir() {
         return temporaryDir;
@@ -59,6 +68,9 @@ public class DecoContextImpl implements DecoContext {
         this.temporaryDir = temporaryDir;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public Path getOutputArchive() {
         return outputArchive;

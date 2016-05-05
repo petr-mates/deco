@@ -40,10 +40,10 @@ import org.w3c.dom.NodeList;
 public class InsertIntoXml {
     private static final Logger LOG = LoggerFactory.getLogger(InsertIntoXml.class);
 
-    protected void insertXml(Document document, Node intoNode, InsertOperation type, Node what) {
+    protected void insertXml(Node intoNode, InsertOperation type, Node what) {
         Element xml = (Element) what;
         NodeList nodeList = xml.getChildNodes();
-
+        Document document = intoNode.getOwnerDocument();
         Node firstChild = null;
         for (int i = 0; i < nodeList.getLength(); i++) {
             if (i == 0) {
@@ -67,12 +67,7 @@ public class InsertIntoXml {
         LOG.debug("node: {} type: {} nodeToInsert: {}", intoNode, type, nodeToInsert);
         switch (type) {
             case INSERT_AS_FIRST_CHILD_OF:
-                Node firstChild1 = intoNode.getFirstChild();
-                if (firstChild1 == null) {
-                    intoNode.appendChild(nodeToInsert);
-                } else {
-                    intoNode.insertBefore(nodeToInsert, firstChild1);
-                }
+                insertAsFirstChild(intoNode, nodeToInsert);
                 break;
             case INSERT_AS_LAST_CHILD_OF:
                 intoNode.appendChild(nodeToInsert);
@@ -83,15 +78,28 @@ public class InsertIntoXml {
                 break;
 
             case INSERT_AFTER:
-                Node nextSibling = intoNode.getNextSibling();
-                if (nextSibling != null) {
-                    intoNode.getParentNode().insertBefore(nodeToInsert, nextSibling);
-                } else {
-                    intoNode.getParentNode().appendChild(nodeToInsert);
-                }
+                insertAfter(intoNode, nodeToInsert);
                 break;
             default:
                 break;
+        }
+    }
+
+    protected void insertAfter(Node intoNode, Node nodeToInsert) {
+        Node nextSibling = intoNode.getNextSibling();
+        if (nextSibling != null) {
+            intoNode.getParentNode().insertBefore(nodeToInsert, nextSibling);
+        } else {
+            intoNode.getParentNode().appendChild(nodeToInsert);
+        }
+    }
+
+    protected void insertAsFirstChild(Node intoNode, Node nodeToInsert) {
+        Node firstChild1 = intoNode.getFirstChild();
+        if (firstChild1 == null) {
+            intoNode.appendChild(nodeToInsert);
+        } else {
+            intoNode.insertBefore(nodeToInsert, firstChild1);
         }
     }
 }
