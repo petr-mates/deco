@@ -45,6 +45,14 @@ public class ReplaceInXml {
         Element xml = (Element) what;
         NodeList nodeList = xml.getChildNodes();
         Node firstChild = null;
+        if (nodeList.getLength() > 0) {
+            replaceNodes(document, where, type, nodeList, firstChild);
+        } else {
+            replaceNode(where, type, null);
+        }
+    }
+
+    private void replaceNodes(Document document, Node where, ReplaceOperation type, NodeList nodeList, Node firstChild) {
         for (int j = 0; j < nodeList.getLength(); j++) {
             if (j == 0) {
                 firstChild = nodeList.item(j);
@@ -64,18 +72,32 @@ public class ReplaceInXml {
         LOG.debug("node: {} type: {} nodeToInsert {}", where, type, nodeToInsert);
         switch (type) {
             case CONTENT:
-                NodeList childNodes = where.getChildNodes();
-                int length = childNodes.getLength();
-                for (int i = length - 1; i > -1; i--) {
-                    where.removeChild(childNodes.item(i));
-                }
-                where.appendChild(nodeToInsert);
+                replaceNodeContent(where, nodeToInsert);
                 break;
             case ENTIRE_NODE:
-                where.getParentNode().replaceChild(nodeToInsert, where);
+                replaceEntireNode(where, nodeToInsert);
                 break;
             default:
                 break;
+        }
+    }
+
+    protected void replaceEntireNode(Node where, Node nodeToInsert) {
+        if (nodeToInsert == null) {
+            where.getParentNode().removeChild(where);
+        } else {
+            where.getParentNode().replaceChild(nodeToInsert, where);
+        }
+    }
+
+    protected void replaceNodeContent(Node where, Node nodeToInsert) {
+        NodeList childNodes = where.getChildNodes();
+        int length = childNodes.getLength();
+        for (int i = length - 1; i > -1; i--) {
+            where.removeChild(childNodes.item(i));
+        }
+        if (nodeToInsert != null) {
+            where.appendChild(nodeToInsert);
         }
     }
 }
