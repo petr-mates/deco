@@ -24,7 +24,6 @@ import cz.deco.core.DecoContextImpl;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -32,24 +31,40 @@ import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 
+/**
+ * deco configure. Take archive and deployment-plan and generate new archive
+ * with configured deployment descriptors.
+ */
 @Mojo(name = "configure", defaultPhase = LifecyclePhase.VERIFY)
 public class ConfigureMojo extends AbstractMojo {
 
+    /**
+     * application archive thean sould be configured. If not specified, then current artifact is taken.
+     */
     @Parameter(property = "deco.source", required = false)
     private File sourceFile;
 
+    /**
+     * target archive, that will be created.
+     */
     @Parameter(property = "deco.target", required = false,
             defaultValue = "${project.build.directory}/${project.build.finalName}-deco.${project.packaging}")
     private File targetFile;
 
+    /**
+     * deployment plan source file.
+     */
     @Parameter(property = "deco.plan", required = true)
     private File deploymentPlan;
 
+    /**
+     * temporary directory.
+     */
     @Parameter(property = "deco.temp", required = true,
             defaultValue = "${project.build.directory}/deco/tmp")
     private File tempDir;
 
-    @Component
+    @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
 
     @Override
