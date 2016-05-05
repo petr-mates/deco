@@ -31,40 +31,91 @@
                         <xsd:documentation>deployment plan name</xsd:documentation>
                     </xsd:annotation>
                 </xsd:element>
-                <xsd:element name="variable-definitions" type="tns:Variable-Definitions" minOccurs="0"/>
+                <xsd:element name="variable-definitions" type="tns:Variable-Definitions" minOccurs="0">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            deployment plan offer you to define variables. Variables can be used in value element as EL
+                            expression.
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:element>
                 <xsd:element name="descriptor-override" type="tns:Descriptor-Override" minOccurs="0"
                              maxOccurs="unbounded"/>
             </xsd:sequence>
-            <xsd:attribute name="version"
-                           type="xsd:decimal"
-                           fixed="1.0"
-                           use="optional">
+            <xsd:attribute name="version" type="xsd:decimal" fixed="1.0" use="optional">
+                <xsd:annotation>
+                    <xsd:documentation>for future features</xsd:documentation>
+                </xsd:annotation>
             </xsd:attribute>
         </xsd:complexType>
     </xsd:element>
 
     <xsd:complexType name="Variable-Definitions">
         <xsd:sequence>
-            <xsd:element name="variable" type="tns:Variable-Definition" minOccurs="1" maxOccurs="unbounded"/>
+            <xsd:element name="variable" type="tns:Variable-Definition" minOccurs="1" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        deployment plan can handle as many variables as you want.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
         </xsd:sequence>
     </xsd:complexType>
     <xsd:complexType name="Variable-Definition">
         <xsd:sequence>
             <xsd:group ref="tns:Description"/>
-            <xsd:element name="name" type="tns:VariableName"/>
-            <xsd:element name="value" type="xsd:string"/>
+            <xsd:element name="name" type="tns:VariableName">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        variable name
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="value" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        value to be replaced in EL expression.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="Descriptor-Override">
         <xsd:sequence>
             <xsd:group ref="tns:Description"/>
-            <xsd:element name="path" type="xsd:anyURI"/>
-            <xsd:element name="module-descriptor" type="tns:Module-Descriptor" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="path" type="xsd:anyURI">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Path to descriptor inside Application Archive.
+                        application.xml in EAR could be fould "/META-INF/application.xml"
+                        OR
+                        glob path match is supported. Deco support to match multiple descriptors in once.
+                        for example **/persistence.xml and in all persistence xml replace for example datasource name.
+
+                        subarchive are represented as normal directory
+                        /any-bean-archive.jar/META-INF/ejb-jar.xml
+                        /web.war/WEB-INF/lib/library.jar/persistence.xml
+
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="module-descriptor" type="tns:Module-Descriptor" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        descriptor override can handle multiple operations at once.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
         </xsd:sequence>
     </xsd:complexType>
 
     <xsd:complexType name="Module-Descriptor">
+        <xsd:annotation>
+            <xsd:documentation>
+                two operations are supported. Replace and Insert.
+            </xsd:documentation>
+        </xsd:annotation>
         <xsd:sequence>
             <xsd:choice maxOccurs="unbounded">
                 <xsd:element name="insert" type="tns:Insert"/>
@@ -76,16 +127,37 @@
     <xsd:complexType name="Insert">
         <xsd:sequence>
             <xsd:group ref="tns:Description"/>
-            <xsd:element name="xpath" type="xsd:string"/>
+            <xsd:element name="xpath" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        namespace aware xpath.
+                        namespace could be defined in global space or in value element of deployment plan.
+                        if xpath is invalid deco LOG this information.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
             <xsd:group ref="tns:Value"/>
         </xsd:sequence>
-        <xsd:attribute name="type" type="tns:InsertOperation" use="required"/>
+        <xsd:attribute name="type" type="tns:InsertOperation" use="required">
+            <xsd:annotation>
+                <xsd:documentation>
+                    you can choose 4 type of insert. see Type definitions.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
     </xsd:complexType>
 
     <xsd:complexType name="Replace">
         <xsd:sequence>
             <xsd:group ref="tns:Description"/>
-            <xsd:element name="xpath" type="xsd:string"/>
+            <xsd:element name="xpath" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        namespace aware xpath.
+                        namespace could be defined in global space or in value element of deployment plan
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
             <xsd:group ref="tns:Value"/>
         </xsd:sequence>
         <xsd:attribute name="type" type="tns:ReplaceOperation" use="required"/>
@@ -94,14 +166,36 @@
 
     <xsd:group name="Description">
         <xsd:sequence>
-            <xsd:element name="description" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="description" type="xsd:string" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>any documentation you would like</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
         </xsd:sequence>
     </xsd:group>
 
     <xsd:group name="Value">
-        <xsd:choice>
-            <xsd:element name="value" type="xsd:anyType"/>
-        </xsd:choice>
+        <xsd:sequence>
+            <xsd:element name="value" type="xsd:anyType">
+                <xsd:annotation>
+                    <xsd:documentation>value could be any type
+                        for example value could be complete xml
+                        ...
+                        <env-entry>
+                            <env-name>name</env-name>
+                        </env-entry>
+                        ...
+                        Value could be Java EL expression ${variable}
+                        or both
+                        <env-entry>
+                            <env-name>${variable}</env-name>
+                        </env-entry>
+
+                        be careful: be aware of namespaces
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
     </xsd:group>
 
     <xsd:simpleType name="VariableName">
@@ -110,17 +204,41 @@
 
     <xsd:simpleType name="InsertOperation">
         <xsd:restriction base="xsd:string">
-            <xsd:enumeration value="insertAfter"/>
-            <xsd:enumeration value="insertBefore"/>
-            <xsd:enumeration value="insertAsLastChildOf"/>
-            <xsd:enumeration value="insertAsFirstChildOf"/>
+            <xsd:enumeration value="insertAfter">
+                <xsd:annotation>
+                    <xsd:documentation>insert node just after selected node</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="insertBefore">
+                <xsd:annotation>
+                    <xsd:documentation>insert node just before selected node</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="insertAsLastChildOf">
+                <xsd:annotation>
+                    <xsd:documentation>insert node as last child of selected node</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="insertAsFirstChildOf">
+                <xsd:annotation>
+                    <xsd:documentation>insert node as first child of selected node</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
         </xsd:restriction>
     </xsd:simpleType>
 
     <xsd:simpleType name="ReplaceOperation">
         <xsd:restriction base="xsd:string">
-            <xsd:enumeration value="content"/>
-            <xsd:enumeration value="entireNode"/>
+            <xsd:enumeration value="content">
+                <xsd:annotation>
+                    <xsd:documentation>replace content of selected node</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="entireNode">
+                <xsd:annotation>
+                    <xsd:documentation>replace selected node with new content</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
         </xsd:restriction>
     </xsd:simpleType>
 
