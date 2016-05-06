@@ -24,7 +24,12 @@ import cz.deco.core.DecoException;
 import cz.deco.xml.XMLFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.DOMConfiguration;
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSOutput;
+import org.w3c.dom.ls.LSSerializer;
 import org.xml.sax.SAXException;
 
 import javax.xml.transform.OutputKeys;
@@ -34,7 +39,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 public class DescriptorHolder {
 
@@ -78,6 +86,14 @@ public class DescriptorHolder {
      * store document back to source file.
      */
     public void storeCurrent() {
+        if (canBeStoredAsLS()) {
+            storeDescriptorPrettyPrint();
+        } else {
+            storeDescriptorAsIs();
+        }
+    }
+
+    protected void storeDescriptorAsIs() {
         Transformer transformer = xmlFactory.getTransformerFactory();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         try (FileWriter out = new FileWriter(getPath().toFile())) {
@@ -87,5 +103,31 @@ public class DescriptorHolder {
         } catch (IOException | TransformerException e) {
             throw new DecoException("cannot store descriptor", e);
         }
+    }
+
+    protected void storeDescriptorPrettyPrint() {
+        DOMImplementation implementation = getDocument().getImplementation();
+        if (implementation instanceof DOMImplementationLS) {
+            DOMImplementationLS ls = (DOMImplementationLS) implementation;
+            LSSerializer lsSerializer = ls.createLSSerializer();
+            DOMConfiguration domConfig = lsSerializer.getDomConfig();
+            if (domConfig.canSetParameter("format-pretty-print", Boolean.TRUE)) {
+                domConfig.setParameter("format-pretty-print", Boolean.TRUE);
+            }
+            LSOutput lsOutput = ls.createLSOutput();
+            lsOutput.setEncoding("UTF-8");
+            try (OutputStream out = Files.newOutputStream(getPath(),
+                    StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
+                lsOutput.setByteStream(out);
+                lsSerializer.write(getDocument(), lsOutput);
+            } catch (IOException e) {
+                throw new DecoException("cannot store descriptor", e);
+            }
+        }
+    }
+
+    protected boolean canBeStoredAsLS() {
+        DOMImplementation implementation = getDocument().getImplementation();
+        return implementation instanceof DOMImplementationLS;
     }
 }
