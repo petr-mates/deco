@@ -41,26 +41,26 @@ public class ConfigureMojo extends AbstractMojo {
     /**
      * application archive thean sould be configured. If not specified, then current artifact is taken.
      */
-    @Parameter(property = "deco.source", required = false)
+    @Parameter(property = "sourceFile", required = false)
     private File sourceFile;
 
     /**
      * target archive, that will be created.
      */
-    @Parameter(property = "deco.target", required = false,
+    @Parameter(property = "targetFile", required = false,
             defaultValue = "${project.build.directory}/${project.build.finalName}-deco.${project.packaging}")
     private File targetFile;
 
     /**
      * deployment plan source file.
      */
-    @Parameter(property = "deco.plan", required = true)
+    @Parameter(property = "deploymentPlan", required = true)
     private File deploymentPlan;
 
     /**
      * temporary directory.
      */
-    @Parameter(property = "deco.temp", required = true,
+    @Parameter(property = "tempDir", required = true,
             defaultValue = "${project.build.directory}/deco/tmp")
     private File tempDir;
 
