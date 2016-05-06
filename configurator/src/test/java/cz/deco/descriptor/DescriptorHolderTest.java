@@ -51,6 +51,7 @@ public class DescriptorHolderTest {
     private DescriptorHolder descriptorHolder = new DescriptorHolder();
 
     private Path pathToStore = new File("target/test/resources/cz/deco/descriptor/web.xml").toPath();
+    private Path pathToStore2 = new File("target/test/resources/cz/deco/descriptor/web2.xml").toPath();
 
     @Before
     public void init() {
@@ -65,33 +66,33 @@ public class DescriptorHolderTest {
     }
 
     @Test
-    public void getDocument() throws Exception {
+    public void testGetDocument() throws Exception {
         Mockito.when(descriptor.getDocument()).thenReturn(document);
         descriptorHolder.setDescriptor(descriptor);
         Assert.assertSame(document, descriptorHolder.getDocument());
     }
 
     @Test
-    public void getPath() throws Exception {
+    public void testGetPath() throws Exception {
         Mockito.when(descriptor.getPath()).thenReturn(path);
         descriptorHolder.setDescriptor(descriptor);
         Assert.assertSame(path, descriptorHolder.getPath());
     }
 
     @Test
-    public void load() throws Exception {
+    public void testLoad() throws Exception {
         Assert.assertTrue(descriptorHolder.load(new File("src/test/resources/cz/deco/descriptor/web.xml").toPath()));
         Assert.assertNotNull(descriptorHolder.getDocument());
         Assert.assertFalse(descriptorHolder.load(new File("src/main/resources/cz/deco/descriptor/web.xml").toPath()));
     }
 
     @Test
-    public void loadInvlaid() throws Exception {
+    public void testLoadInvlaid() throws Exception {
         Assert.assertFalse(descriptorHolder.load(new File("src/test/resources/cz/deco/descriptor/web-invalid.xml").toPath()));
     }
 
     @Test
-    public void storeCurrent() throws Exception {
+    public void testStoreCurrent() throws Exception {
         Assert.assertFalse(pathToStore.toFile().exists());
         DescriptorHolder descriptorHolder = new DescriptorHolder() {
             @Override
@@ -102,5 +103,19 @@ public class DescriptorHolderTest {
         descriptorHolder.load(new File("src/test/resources/cz/deco/descriptor/web.xml").toPath());
         descriptorHolder.storeCurrent();
         Assert.assertTrue(pathToStore.toFile().exists());
+    }
+
+    @Test
+    public void testStoreDescriptorAsIs() throws Exception {
+        Assert.assertFalse(pathToStore2.toFile().exists());
+        DescriptorHolder descriptorHolder = new DescriptorHolder() {
+            @Override
+            protected Path getPath() {
+                return pathToStore2;
+            }
+        };
+        descriptorHolder.load(new File("src/test/resources/cz/deco/descriptor/web.xml").toPath());
+        descriptorHolder.storeDescriptorAsIs();
+        Assert.assertTrue(pathToStore2.toFile().exists());
     }
 }
