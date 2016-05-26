@@ -1,5 +1,6 @@
 # Deployment Descriptor Configurator
 [![Build Status](https://travis-ci.org/petr-mates/deco.svg?branch=develop)](https://travis-ci.org/petr-mates/deco)
+[![Coverage Status](https://coveralls.io/repos/github/petr-mates/deco/badge.svg?branch=develop)](https://coveralls.io/github/petr-mates/deco?branch=develop)
 
 Application to configure Java EE applications using deployment plan.
 
