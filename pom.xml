@@ -270,7 +270,7 @@
                             <source>src/main/java</source>
                             <source>src/test/java</source>
                         </sourceDirectories>
-                        <excludes>**/generated/**/*</excludes>
+                        <excludes>**/generated-sources/**/*</excludes>
                         <configLocation>checkstyle/checkstyle.xml</configLocation>
                         <consoleOutput>true</consoleOutput>
                         <failsOnError>true</failsOnError>
