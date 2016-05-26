@@ -1,4 +1,5 @@
 # Deployment Descriptor Configurator
+[![Build Status](https://travis-ci.org/petr-mates/deco.svg?branch=devel)](https://travis-ci.org/petr-mates/deco)
 
 Application to configure Java EE applications using deployment plan.
 
