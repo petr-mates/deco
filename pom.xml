@@ -287,7 +287,7 @@
                     <executions>
                         <execution>
                             <id>check-style</id>
-                            <phase>compile</phase>
+                            <phase>validate</phase>
                             <goals>
                                 <goal>checkstyle</goal>
                             </goals>
