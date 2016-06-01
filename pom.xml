@@ -50,7 +50,7 @@
     <inceptionYear>2016</inceptionYear>
 
     <prerequisites>
-        <maven>3.0</maven>
+        <maven>3.0.5</maven>
     </prerequisites>
 
     <properties>
@@ -297,7 +297,7 @@
                 <plugin>
                     <groupId>org.sonarsource.scanner.maven</groupId>
                     <artifactId>sonar-maven-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.0.2</version>
                     <configuration>
                     </configuration>
                 </plugin>
