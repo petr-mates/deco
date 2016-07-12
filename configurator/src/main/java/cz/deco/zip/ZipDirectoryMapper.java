@@ -30,6 +30,7 @@ import java.util.Map;
 
 public class ZipDirectoryMapper implements Iterable<Map.Entry<String, FileEntry>> {
 
+
     private Map<String, FileEntry> zipFileMap = new LinkedHashMap<>();
     private Map<String, String> fileZipMap = new HashMap<>();
 

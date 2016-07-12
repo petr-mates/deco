@@ -24,6 +24,7 @@ import org.hamcrest.core.StringContains;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
 import java.nio.file.Paths;
 
 public class ZipDirectoryMapperTest {
@@ -42,7 +43,8 @@ public class ZipDirectoryMapperTest {
         mapper.put(Paths.get("/conf/"), Paths.get("test"), EntryType.ZIP);
         ZipDirectoryMapper putAll = new ZipDirectoryMapper();
         putAll.putAll(Paths.get("/conf/"), mapper);
-        Assert.assertEquals("/conf/conf", putAll.iterator().next().getKey());
+        String expectedPath = new StringBuilder(File.separator).append("conf").append(File.separator).append("conf").toString();
+        Assert.assertEquals(expectedPath, putAll.iterator().next().getKey());
     }
 
     @Test
@@ -66,6 +68,8 @@ public class ZipDirectoryMapperTest {
     public void testToString() throws Exception {
         ZipDirectoryMapper mapper = new ZipDirectoryMapper();
         mapper.put(Paths.get("/conf/name.xml"), Paths.get("test"), EntryType.ZIP);
-        Assert.assertThat(mapper.toString(), StringContains.containsString("zip: /conf/name.xml"));
+
+        String expectedPath = new StringBuilder("zip: ").append(File.separator).append("conf").append(File.separator).append("name.xml").toString();
+        Assert.assertThat(mapper.toString(), StringContains.containsString(expectedPath));
     }
 }

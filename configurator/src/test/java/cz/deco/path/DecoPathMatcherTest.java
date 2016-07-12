@@ -27,10 +27,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
 
 public class DecoPathMatcherTest {
+
 
     private ZipDirectoryMapper mapper = new ZipDirectoryMapper();
 
@@ -69,6 +71,7 @@ public class DecoPathMatcherTest {
         DecoPathMatcher decoPathMatcher = new DecoPathMatcher(mapper);
         List<FileEntry> byPath = decoPathMatcher.findByPath("conf/**/persistence.xml");
         Assert.assertEquals(1, byPath.size());
-        Assert.assertEquals("conf/test.zip/persistence.xml", byPath.get(0).getFilePath());
+        String resultPath = new StringBuilder("conf").append(File.separatorChar).append("test.zip").append(File.separator).append("persistence.xml").toString();
+        Assert.assertEquals(resultPath, byPath.get(0).getFilePath());
     }
 }

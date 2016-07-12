@@ -23,6 +23,7 @@ package cz.deco.zip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.FileSystem;
@@ -46,20 +47,36 @@ public class PackApplication {
         this.mapper = mapper;
     }
 
+    private static String convertToFileURL(String filename) {
+        String path = new File(filename).getAbsolutePath();
+        if (File.separatorChar != '/') {
+            path = path.replace(File.separatorChar, '/');
+        }
+        if (!path.startsWith("/")) {
+            path = "/" + path;
+        }
+        String retVal = "file:" + path;
+
+        return retVal;
+    }
+
     public void pack(final Path directory, final FileSystem fs) throws IOException {
 
         Files.walkFileTree(directory, new PathFileVisitor(fs, directory));
     }
 
+
     public Path createZip(Path sourceDirectory, Path targetZip) throws IOException {
-        URI newJarFile = URI.create("jar:file:" + targetZip.toString());
-        LOG.debug("new jar file {}", newJarFile);
+        URI newJarFile = URI.create("jar:" +
+                convertToFileURL(targetZip.toString()));
+        LOG.info("new jar file {}", newJarFile);
         try (FileSystem fileSystem = FileSystems.newFileSystem(newJarFile,
                 Collections.singletonMap("create", "true"))) {
             pack(sourceDirectory, fileSystem);
         }
         return targetZip;
     }
+
 
     private class PathFileVisitor implements FileVisitor<Path> {
         private final FileSystem fs;
